@@ -1,0 +1,5 @@
+﻿Per 8,5
+Hans 7
+Morten 6
+Kristin 3
+Ole 1,5

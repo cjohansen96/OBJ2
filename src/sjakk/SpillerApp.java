@@ -5,7 +5,12 @@
  */
 package sjakk;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,7 +29,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 /**
  *
  * @author Markus
@@ -42,11 +49,21 @@ public class SpillerApp extends Application {
     TextField tekstNavn;
     Scene sceneEn,sceneTo;
     
+    TableView<Spiller> table;
+    ObservableList<Spiller> rankListe;
+    ObservableList<Parti> partiListe;
     @Override
     public void start(Stage primaryStage) {
         
+     
         
        root = new BorderPane();
+       
+       
+       
+       rankListe = Manager.getSpillere(); 
+        
+       
        
        vindu = new StackPane();
        vindu.setBorder(new Border(
@@ -57,26 +74,61 @@ public class SpillerApp extends Application {
         
        vindu.setAlignment(Pos.CENTER);
        
-       sideMeny = new VBox();
+       sideMeny = new VBox(10);
        sideMeny.setPadding(new Insets(60.0));
        
        
-        Button knappRang = new Button("Rangering");
-        knappRang.setPadding(new Insets(8,17,8,17));
-        
-        Label ledetekst = new Label("Finn spiller's parti");
-        tekstNavn = new TextField();
-        Button knappSøk = new Button("Søk");
-        knappSøk.setPadding(new Insets(8,17,8,17));
-        
-        
-        Button knappParti = new Button("Se valgt parti");
-        knappParti.setPadding(new Insets(8,17,8,17));
-        
-        sideMeny.getChildren().addAll(knappRang,ledetekst,tekstNavn,knappSøk,knappParti);
+       Button knappRang = new Button("Rangering");
        
+       knappRang.setPadding(new Insets(8,17,8,17));
+        
+       Label ledeTekst = new Label("Finn spiller's parti");
+       ledeTekst.setStyle("-fx-font-size: 10pt ");
+       ledeTekst.setStyle("-fx-font-weight: bold");
+       ledeTekst.setPadding(new Insets(60,0,0,0));
+        
+       tekstNavn = new TextField();
+        
+       Button knappSøk = new Button("Søk");
+       knappSøk.setPadding(new Insets(8,17,8,17));
+        
+        
+       Label ledeTekstAn = new Label("Se Animasjon av valgt parti");
+       ledeTekstAn.setStyle("-fx-font-size: 10pt ");
+       ledeTekstAn.setStyle("-fx-font-weight: bold");
+       ledeTekstAn.setPadding(new Insets(60,0,0,0));
+        
+       Button knappStart = new Button("Start");
+       knappStart.setPadding(new Insets(8,17,8,17));
+       knappStart.setDisable(true);
+        
+        
+       sideMeny.getChildren().addAll(knappRang,ledeTekst,tekstNavn,knappSøk,ledeTekstAn,knappStart);
        
+        // Navn kollone
+        TableColumn<Spiller,String> Navn = new TableColumn<>("Navn");
+        Navn.setMinWidth(100);
+        Navn.setCellValueFactory(new PropertyValueFactory<>("navn"));
+        
+        // Poeng kollone
+        TableColumn<Spiller,Integer> Poeng = new TableColumn<>("Poeng");
+        Poeng.setMinWidth(200);
+        Poeng.setCellValueFactory(new PropertyValueFactory<>("poeng"));
+        
        
+        
+        table = new TableView<>();
+        
+        // add objekt to table
+        table.setItems(rankListe);
+        
+       
+        // set table column
+        table.getColumns().addAll(Navn,Poeng);
+        
+        vindu.getChildren().add(table);
+        
+        
        
        root.setLeft(sideMeny);
        root.setCenter(vindu);
@@ -86,12 +138,17 @@ public class SpillerApp extends Application {
         
       
         
-        primaryStage.setTitle("SpillerApp");
-        primaryStage.setScene(sceneEn);
-        primaryStage.show();
+       primaryStage.setTitle("SpillerApp");
+       primaryStage.setScene(sceneEn);
+       primaryStage.show();
     }
 
 
+    
+    
+    
+  
+        
     public static void main(String[] args) {
         launch(args);
     }

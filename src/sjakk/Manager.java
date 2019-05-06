@@ -1,5 +1,6 @@
 package sjakk;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -8,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -26,6 +28,8 @@ public class Manager {
     public ObservableList<Parti> getPartier() {
         lastInnFil();
         ObservableList<Parti> partiListe = FXCollections.observableArrayList(partier);
+        
+       
         return partiListe;
     }  
     
@@ -39,6 +43,8 @@ public class Manager {
         try {
             inputStream = new ObjectInputStream(new FileInputStream(TURNERING_FIL));
             partier = (List<Parti>) inputStream.readObject();
+            
+            
 
         } catch (FileNotFoundException e) {
             System.out.println("[Last inn] FNF Error: " + e.getMessage());
@@ -89,10 +95,38 @@ public class Manager {
         for(Parti p: parti) {
             partiString +=  parti.get(i).getDato() + " " + parti.get(i).getKlokkeSlett() + " "  
                  + parti.get(i).getSpiller1().getNavn() + " " + parti.get(i).getSpiller2().getNavn() + " " 
-                 + parti.get(i).getVinner() + " " + parti.get(i).getTrekk() + ";" + "\n";
+                 + parti.get(i).getResultat() + " " + parti.get(i).getTrekk() + ";" + "\n";
             i++;
         }
         return partiString;
     }
+    
+    
+      public static ObservableList<Spiller> getSpillere() {
+        
+        ObservableList<Spiller> spillere = FXCollections.observableArrayList();
+        
+        File file = new File("src/sjakk/DummyRank.txt");
+        try(Scanner sc = new Scanner(file);){
+            
+            double poeng;
+            String navn;
+            while(sc.hasNextLine()){
+                navn = sc.next();
+                poeng = sc.nextDouble();
+            
+            spillere.add(new Spiller(navn,poeng));
+                              
+            }
+        sc.close();
+        }catch(Exception e){
+            
+             e.printStackTrace(System.out);
+        }
+       
+        
+        return spillere;
+        }
+        
     
 }
