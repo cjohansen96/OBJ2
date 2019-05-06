@@ -8,11 +8,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Manager {
-        private List<Parti> partier;
+    private List<Parti> partier;
 
-    private static final String TURNERING_FIL = "tunering.dat";
+    private static final String TURNERING_FIL = "turnering.dat";
 
     ObjectOutputStream outputStream = null;
     ObjectInputStream inputStream = null;
@@ -21,9 +23,10 @@ public class Manager {
         partier = new ArrayList<>();
     }
     
-    public List<Parti> getPartier() {
+    public ObservableList<Parti> getPartier() {
         lastInnFil();
-        return partier;
+        ObservableList<Parti> partiListe = FXCollections.observableArrayList(partier);
+        return partiListe;
     }  
     
     public void leggTilParti(Spiller spiller1, Spiller spiller2, String dato, String klokkeSlett, String vinner, String trekk) {
@@ -74,6 +77,22 @@ public class Manager {
                 System.out.println("[Oppdatering] Error: " + e.getMessage());
             }
         }
+    }
+    
+    public String getPartierUtTekst() {
+        String partiString = "";
+
+        List<Parti> parti;
+        parti = getPartier();
+
+        int i = 0;
+        for(Parti p: parti) {
+            partiString +=  parti.get(i).getDato() + " " + parti.get(i).getKlokkeSlett() + " "  
+                 + parti.get(i).getSpiller1().getNavn() + " " + parti.get(i).getSpiller2().getNavn() + " " 
+                 + parti.get(i).getVinner() + " " + parti.get(i).getTrekk() + ";" + "\n";
+            i++;
+        }
+        return partiString;
     }
     
 }
