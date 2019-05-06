@@ -48,20 +48,20 @@ public class SpillerApp extends Application {
     VBox sideMeny;
     TextField tekstNavn;
     Scene sceneEn,sceneTo;
+    Turnering turnering;
     
-    TableView<Spiller> table;
+    TableView<Spiller> sTable;
+    TableView<Parti> pTable;
+    
     ObservableList<Spiller> rankListe;
     ObservableList<Parti> partiListe;
     @Override
     public void start(Stage primaryStage) {
         
-     
+       turnering = new Turnering();
         
        root = new BorderPane();
        
-       
-       
-       rankListe = Manager.getSpillere(); 
         
        
        
@@ -79,8 +79,11 @@ public class SpillerApp extends Application {
        
        
        Button knappRang = new Button("Rangering");
-       
        knappRang.setPadding(new Insets(8,17,8,17));
+       
+       
+       
+       
         
        Label ledeTekst = new Label("Finn spiller's parti");
        ledeTekst.setStyle("-fx-font-size: 10pt ");
@@ -105,9 +108,12 @@ public class SpillerApp extends Application {
         
        sideMeny.getChildren().addAll(knappRang,ledeTekst,tekstNavn,knappSøk,ledeTekstAn,knappStart);
        
+       
+       // View for RangeringListe
+       
         // Navn kollone
         TableColumn<Spiller,String> Navn = new TableColumn<>("Navn");
-        Navn.setMinWidth(100);
+        Navn.setMinWidth(200);
         Navn.setCellValueFactory(new PropertyValueFactory<>("navn"));
         
         // Poeng kollone
@@ -115,19 +121,24 @@ public class SpillerApp extends Application {
         Poeng.setMinWidth(200);
         Poeng.setCellValueFactory(new PropertyValueFactory<>("poeng"));
         
-       
-        
-        table = new TableView<>();
-        
-        // add objekt to table
-        table.setItems(rankListe);
-        
-       
+        sTable = new TableView<>();
         // set table column
-        table.getColumns().addAll(Navn,Poeng);
+        sTable.getColumns().addAll(Navn,Poeng);
         
-        vindu.getChildren().add(table);
+      
+         knappRang.setOnAction(e -> {
+           rankListe = turnering.getRangering();
+           sTable.setItems(rankListe);
+           vindu.getChildren().remove(sTable);
+           vindu.getChildren().add(sTable);
+        });
+         
+         
+         //View for Partier
+         
+         // Navn kollone
         
+         // partiListe = turnering.getPartier();   
         
        
        root.setLeft(sideMeny);
