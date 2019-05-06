@@ -12,6 +12,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
@@ -30,14 +32,15 @@ import javafx.stage.Stage;
 public class SpillerApp extends Application {
     
      
-    private final static int WIDTH = 1000;
-    private final static int HEIGHT = 700;
+    private final static int BREDDE = 1000;
+    private final static int HOYDE = 700;
     
     
     BorderPane root;
-    StackPane window;
-    VBox sideMenu;
-    Scene sceneTable,sceneAn;
+    StackPane vindu;
+    VBox sideMeny;
+    TextField tekstNavn;
+    Scene sceneEn,sceneTo;
     
     @Override
     public void start(Stage primaryStage) {
@@ -45,31 +48,46 @@ public class SpillerApp extends Application {
         
        root = new BorderPane();
        
-       window = new StackPane();
-       window.setBorder(new Border(
+       vindu = new StackPane();
+       vindu.setBorder(new Border(
             new BorderStroke(Color.BLUE, 
             BorderStrokeStyle.SOLID,
             CornerRadii.EMPTY,
             BorderWidths.DEFAULT)));
         
-       window.setAlignment(Pos.CENTER);
+       vindu.setAlignment(Pos.CENTER);
        
-       sideMenu = new VBox();
-       sideMenu.setPadding(new Insets(60.0));
-       
-       
+       sideMeny = new VBox();
+       sideMeny.setPadding(new Insets(60.0));
        
        
-       root.setLeft(sideMenu);
-       root.setCenter(window);
-       sceneTable = new Scene(root,WIDTH,HEIGHT);
+        Button knappRang = new Button("Rangering");
+        knappRang.setPadding(new Insets(8,17,8,17));
+        
+        Label ledetekst = new Label("Finn spiller's parti");
+        tekstNavn = new TextField();
+        Button knappSøk = new Button("Søk");
+        knappSøk.setPadding(new Insets(8,17,8,17));
+        
+        
+        Button knappParti = new Button("Se valgt parti");
+        knappParti.setPadding(new Insets(8,17,8,17));
+        
+        sideMeny.getChildren().addAll(knappRang,ledetekst,tekstNavn,knappSøk,knappParti);
+       
+       
+       
+       
+       root.setLeft(sideMeny);
+       root.setCenter(vindu);
+       sceneEn= new Scene(root,BREDDE,HOYDE);
        
        
         
       
         
         primaryStage.setTitle("SpillerApp");
-        primaryStage.setScene(sceneTable);
+        primaryStage.setScene(sceneEn);
         primaryStage.show();
     }
 
