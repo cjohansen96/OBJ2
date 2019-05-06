@@ -39,15 +39,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class SpillerApp extends Application {
     
      
-    private final static int BREDDE = 1000;
+    private final static int BREDDE = 1200;
     private final static int HOYDE = 700;
     
-    
+    //sceneEn
     BorderPane root;
     StackPane vindu;
     VBox sideMeny;
     TextField tekstNavn;
     Scene sceneEn,sceneTo;
+    
+    
+    //sceneTo
+    SpillerAnimasjon spillerAnimasjon;
     Turnering turnering;
     
     TableView<Spiller> sTable;
@@ -59,7 +63,7 @@ public class SpillerApp extends Application {
     public void start(Stage primaryStage) {
         
        turnering = new Turnering();
-        
+       spillerAnimasjon = new SpillerAnimasjon(); 
        root = new BorderPane();
        
         
@@ -67,10 +71,10 @@ public class SpillerApp extends Application {
        
        vindu = new StackPane();
        vindu.setBorder(new Border(
-            new BorderStroke(Color.BLUE, 
+            new BorderStroke(Color.BROWN, 
             BorderStrokeStyle.SOLID,
             CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
+            new BorderWidths(3))));
         
        vindu.setAlignment(Pos.CENTER);
        
@@ -103,10 +107,21 @@ public class SpillerApp extends Application {
         
        Button knappStart = new Button("Start");
        knappStart.setPadding(new Insets(8,17,8,17));
-       knappStart.setDisable(true);
+     //knappStart.setDisable(true);
+       knappStart.setOnAction( e -> {
+           
+           
+           primaryStage.setScene(sceneTo);
+           
+       });
         
-        
-       sideMeny.getChildren().addAll(knappRang,ledeTekst,tekstNavn,knappSøk,ledeTekstAn,knappStart);
+       sideMeny.getChildren().addAll(
+        knappRang,
+        ledeTekst,
+        tekstNavn,
+        knappSøk,
+        ledeTekstAn,
+        knappStart);
        
        
        // View for RangeringListe
@@ -126,12 +141,7 @@ public class SpillerApp extends Application {
         sTable.getColumns().addAll(Navn,Poeng);
         
       
-         knappRang.setOnAction(e -> {
-           rankListe = turnering.getRangering();
-           sTable.setItems(rankListe);
-           vindu.getChildren().remove(sTable);
-           vindu.getChildren().add(sTable);
-        });
+      
          
          
          //View for Partier
@@ -141,16 +151,27 @@ public class SpillerApp extends Application {
          // partiListe = turnering.getPartier();   
         
        
+         
+       knappRang.setOnAction(e -> {
+        rankListe = turnering.getRangering();
+        sTable.setItems(rankListe);
+        vindu.getChildren().remove(sTable);
+        vindu.getChildren().add(sTable);
+       });
+         
+         
        root.setLeft(sideMeny);
        root.setCenter(vindu);
-       sceneEn= new Scene(root,BREDDE,HOYDE);
        
+       sceneEn = new Scene(root,BREDDE,HOYDE);
+       sceneTo = new Scene(spillerAnimasjon,BREDDE,HOYDE);
        
         
       
         
        primaryStage.setTitle("SpillerApp");
        primaryStage.setScene(sceneEn);
+       primaryStage.setResizable(false);
        primaryStage.show();
     }
 
