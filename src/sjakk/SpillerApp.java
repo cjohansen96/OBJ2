@@ -40,11 +40,12 @@ import javafx.scene.layout.Background;
 public class SpillerApp extends Application {
     
      
-    private final static int BREDDE = 1200;
-    private final static int HOYDE = 700;
+    private final static int BREDDE = 1000;
+    private final static int HOYDE = 800;
     
     //sceneEn
-    BorderPane root;
+    BorderPane rootEn;
+    BorderPane rootTo;
     StackPane vindu;
     VBox sideMeny;
     TextField tekstNavn;
@@ -66,10 +67,13 @@ public class SpillerApp extends Application {
         
        turnering = new Turnering();
        spillerAnimasjon = new SpillerAnimasjon(); 
-       root = new BorderPane();
        
-       sceneEn = new Scene(root,BREDDE,HOYDE);
-       sceneTo = new Scene(spillerAnimasjon,BREDDE,HOYDE);
+       rootEn = new BorderPane();
+       rootTo = new BorderPane();
+       
+       
+       sceneEn = new Scene(rootEn,BREDDE,HOYDE);
+       sceneTo = new Scene(rootTo,BREDDE,HOYDE);
        
        
        vindu = new StackPane();
@@ -149,7 +153,9 @@ public class SpillerApp extends Application {
       
       
       sideBar.getChildren().addAll(knappTilbake);
-      spillerAnimasjon.setLeft(sideBar);
+      rootTo.setLeft(sideBar);
+      rootTo.setCenter(spillerAnimasjon);
+      
       
       
       
@@ -192,8 +198,8 @@ public class SpillerApp extends Application {
        });
          
          
-       root.setLeft(sideMeny);
-       root.setCenter(vindu);
+       rootEn.setLeft(sideMeny);
+       rootEn.setCenter(vindu);
        
        
        
