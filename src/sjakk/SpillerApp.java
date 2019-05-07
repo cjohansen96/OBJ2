@@ -64,7 +64,7 @@ public class SpillerApp extends Application {
     public void start(Stage primaryStage) {
         
        turnering = new Turnering();
-       spillerAnimasjon = new SpillerAnimasjon(); 
+       spillerAnimasjon = new SpillerAnimasjon();
        
        rootEn = new BorderPane();
        rootTo = new BorderPane();
@@ -129,6 +129,8 @@ public class SpillerApp extends Application {
            
            
            primaryStage.setScene(sceneTo);
+           spillerAnimasjon.byggBrett();
+          
            
        });
        

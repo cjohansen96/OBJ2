@@ -22,14 +22,16 @@ public class SpillerAnimasjon extends Pane{
     public static final int BREDDE = 8;
     public static final int HOYDE = 8;
     
-    private Rute [][] brett = new Rute[BREDDE][HOYDE];
+    private Rute [][] brett;
     
     private Group ruteGruppe = new Group();
     private Group brikkeGruppe = new Group();
     
     
     public SpillerAnimasjon(){
+        super();
         
+        brett = new Rute[BREDDE][HOYDE];
         
         // Lager brettet, å setter start av brikkene
         setBorder(new Border(
@@ -42,6 +44,9 @@ public class SpillerAnimasjon extends Pane{
         setPrefSize(BREDDE * RUTE_STR, HOYDE * RUTE_STR);
         getChildren().addAll(ruteGruppe, brikkeGruppe);
         
+        
+    }
+    public void byggBrett(){
         //Alle rutene får ett rutenavn
         String ruteNavn;
         int num;
@@ -74,8 +79,9 @@ public class SpillerAnimasjon extends Pane{
             }
             
         }
-        
     }
+        
+    
     
     
     private Brikke lagBrikke(int x, int y,String farge){

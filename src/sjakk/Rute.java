@@ -8,11 +8,10 @@ import javafx.scene.shape.Rectangle;
  *
  * @author Markus
  */
-public class Rute extends Rectangle {
+public class Rute extends Rectangle{
     
     private Brikke brikke;
     String rNavn;
-    
     
     public Rute(boolean hvit,int x,int y, String rNavn){
         
@@ -26,8 +25,7 @@ public class Rute extends Rectangle {
         setFill(hvit ? Color.valueOf("#ffcc66") : Color.valueOf("#800000"));
     }
     
-    
-    public boolean harBrikke(){
+      public boolean harBrikke(){
         return brikke != null;
     }
     public Brikke getBrikke(){
