@@ -32,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
 /**
  *
  * @author Markus
@@ -52,6 +53,7 @@ public class SpillerApp extends Application {
     
     //sceneTo
     SpillerAnimasjon spillerAnimasjon;
+    VBox sideBar;
     Turnering turnering;
     
     TableView<Spiller> sTable;
@@ -66,7 +68,8 @@ public class SpillerApp extends Application {
        spillerAnimasjon = new SpillerAnimasjon(); 
        root = new BorderPane();
        
-        
+       sceneEn = new Scene(root,BREDDE,HOYDE);
+       sceneTo = new Scene(spillerAnimasjon,BREDDE,HOYDE);
        
        
        vindu = new StackPane();
@@ -108,21 +111,50 @@ public class SpillerApp extends Application {
        Button knappStart = new Button("Start");
        knappStart.setPadding(new Insets(8,17,8,17));
      //knappStart.setDisable(true);
-       knappStart.setOnAction( e -> {
+     
+     
+       sideMeny.getChildren().addAll(
+       knappRang,
+       ledeTekst,
+       tekstNavn,
+       knappSøk,
+       ledeTekstAn,
+       knappStart);
+       
+     
+     
+      knappStart.setOnAction( e -> {
            
            
            primaryStage.setScene(sceneTo);
            
        });
-        
-       sideMeny.getChildren().addAll(
-        knappRang,
-        ledeTekst,
-        tekstNavn,
-        knappSøk,
-        ledeTekstAn,
-        knappStart);
        
+      
+      // Sidebar sceneTo
+      sideBar = new VBox();
+      sideBar.setPrefWidth(160);
+      sideBar.setAlignment(Pos.CENTER);
+      sideBar.setBorder(new Border(
+        new BorderStroke(Color.BROWN, 
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        new BorderWidths(3))));
+      
+      Button knappTilbake = new Button("Tilbake");
+      knappTilbake.setPadding(new Insets(0,7,0,7));
+      knappTilbake.setOnAction(e ->{
+          primaryStage.setScene(sceneEn);
+      });
+      
+      
+      sideBar.getChildren().addAll(knappTilbake);
+      spillerAnimasjon.setLeft(sideBar);
+      
+      
+      
+      
+      
        
        // View for RangeringListe
        
@@ -163,8 +195,7 @@ public class SpillerApp extends Application {
        root.setLeft(sideMeny);
        root.setCenter(vindu);
        
-       sceneEn = new Scene(root,BREDDE,HOYDE);
-       sceneTo = new Scene(spillerAnimasjon,BREDDE,HOYDE);
+       
        
         
       

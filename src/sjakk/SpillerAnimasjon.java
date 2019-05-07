@@ -18,7 +18,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class SpillerAnimasjon extends BorderPane{
     
-    VBox sideBar;
+    
     GridPane brett;
     
     final int str = 8;
@@ -26,13 +26,6 @@ public class SpillerAnimasjon extends BorderPane{
     
     public SpillerAnimasjon(){
         super();
-        sideBar = new VBox();
-        sideBar.setPrefWidth(160);
-        sideBar.setBorder(new Border(
-            new BorderStroke(Color.BROWN, 
-            BorderStrokeStyle.SOLID,
-            CornerRadii.EMPTY,
-            new BorderWidths(3))));
         
         
         
@@ -46,8 +39,6 @@ public class SpillerAnimasjon extends BorderPane{
         
         
         byggBrett();
-        
-        this.setLeft(sideBar);
         this.setCenter(brett);
         
         
