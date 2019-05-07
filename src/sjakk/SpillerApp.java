@@ -5,9 +5,7 @@
  */
 package sjakk;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -11,10 +11,12 @@ import javafx.scene.shape.Rectangle;
 public class Rute extends Rectangle {
     
     private Brikke brikke;
+    String rNavn;
     
     
-    
-    public Rute(boolean hvit,int x,int y){
+    public Rute(boolean hvit,int x,int y, String rNavn){
+        
+        this.rNavn = rNavn;
         setWidth(SpillerAnimasjon.RUTE_STR);
         
         setHeight(SpillerAnimasjon.RUTE_STR);
