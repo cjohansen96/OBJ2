@@ -13,7 +13,7 @@ import static sjakk.SpillerAnimasjon.RUTE_STR;
  */
 public class Brikke extends StackPane{
     
-    private static String[] brikkeType = {"Tårn","Hest","Løper","Dronning","Konge","Bonde"};
+    
     private String farge,type;
     private double nyX,nyY;
     private double gammelX,gammelY;
@@ -23,6 +23,7 @@ public class Brikke extends StackPane{
         this.type = type;
         this.farge = farge;
         
+        startPlass(x,y);
      
         
         Ellipse ellipse = new Ellipse(RUTE_STR * 0.3125, RUTE_STR * 0.26);
@@ -41,6 +42,11 @@ public class Brikke extends StackPane{
         getChildren().addAll(ellipse);
         
         
+    }
+    public void startPlass(int x,int y){
+        gammelX = x * RUTE_STR;
+        gammelY = y * RUTE_STR;
+        relocate(gammelX,gammelY);
     }
 
    

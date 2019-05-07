@@ -25,7 +25,7 @@ public class Rute extends Rectangle{
         setFill(hvit ? Color.valueOf("#ffcc66") : Color.valueOf("#800000"));
     }
     
-      public boolean harBrikke(){
+    public boolean harBrikke(){
         return brikke != null;
     }
     public Brikke getBrikke(){
@@ -35,6 +35,11 @@ public class Rute extends Rectangle{
     public void setBrikke(Brikke brikke){
         this.brikke = brikke;
     }
+
+    public String getrNavn() {
+        return rNavn;
+    }
+    
     
     
 }

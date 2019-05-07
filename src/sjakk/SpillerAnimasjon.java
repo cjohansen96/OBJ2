@@ -23,6 +23,7 @@ public class SpillerAnimasjon extends Pane{
     public static final int HOYDE = 8;
     
     private Rute [][] brett;
+    String[] brikkeFørste = {"Tårn","Hest","Løper","Dronning","Konge","Løper","Hest","Tårn"};
     
     private Group ruteGruppe = new Group();
     private Group brikkeGruppe = new Group();
@@ -55,38 +56,103 @@ public class SpillerAnimasjon extends Pane{
         for (int y = 0; y < HOYDE; y++) {
                 
             for (int x = 0; x < BREDDE; x++) {
-                num = y+1;
+                num = x+1;
                 ruteNavn = ""+bokstav[x]+num;
                 Rute rute = new Rute((x + y) % 2 == 0, x, y,ruteNavn);
                 brett[x][y] = rute;
+                
 
                 ruteGruppe.getChildren().add(rute);
 
                 Brikke brikke = null;
-                
+                System.out.println(ruteNavn);
                 if(y == 0 || y == 7){
-                    
-                }
-                if(y == 1 || y == 6){
-                    if(HOYDE == 1){
-                       brikke = lagBrikke(x,y,"svart"); 
+                    switch(x) {
+                        case 0:
+                            if(y==0)
+                             brikke = lagBrikke(brikkeFørste[x],x,y,"svart");
+                            else
+                             brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");   
+                        break;
+                        case 7:
+                            if(y==0)
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"svart");
+                            else
+                             brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");   
+                        break;
+                        case 1:
+                            if(y==0)
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"svart"); 
+                            else
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");
+                        break;
+                        case 6:
+                            if(y==0)
+                             brikke = lagBrikke(brikkeFørste[x],x,y,"svart");
+                            else
+                             brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");
+                        break;
+                        case 2:
+                            if(y==0)
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"svart");
+                            else
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");    
+                        break;
+                        case 5:
+                            if(y==0)
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"svart");
+                            else
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");    
+                        break;
+                        case 3:
+                            if(y == 0)
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"svart"); 
+                            else
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");
+                        break;
+                        case 4:
+                            if(y == 0)
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"svart"); 
+                            else
+                            brikke = lagBrikke(brikkeFørste[x],x,y,"hvit");
+                        break;
+                       
+                     
+                   }
+                     if(brikke != null){
+                        rute.setBrikke(brikke);
+                        brikkeGruppe.getChildren().add(brikke);
                     }
-                    else
-                       brikke = lagBrikke(x,y,"hvit"); 
                 }
-                
-                
-            }
+                   
             
+                if(y == 1 || y == 6){
+                    if(y == 1){
+                       brikke = lagBrikke("Bonde",x,y,"svart"); 
+                    }
+                    else{
+                       brikke = lagBrikke("Bonde",x,y,"hvit"); 
+                       
+                    }
+                    if(brikke != null){
+                        rute.setBrikke(brikke);
+                        brikkeGruppe.getChildren().add(brikke);
+                    }
+                    
+                   
+                
+                
+                }
+            }
         }
     }
         
     
     
     
-    private Brikke lagBrikke(int x, int y,String farge){
+    private Brikke lagBrikke(String type,int x, int y,String farge){
        
-        Brikke brikke = new Brikke("Bonde",x,y,farge);
+        Brikke brikke = new Brikke(type,x,y,farge);
         
         return brikke;
     }
