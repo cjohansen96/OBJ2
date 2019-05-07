@@ -1,7 +1,12 @@
 package sjakk;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,6 +45,10 @@ public class Admapp extends Application{
     Button knappLeggTil, knappDato, knappNyttParti;
     TableView table;
     
+    ObservableList<Spiller> spillerListe = FXCollections.observableArrayList();
+    ObservableList<Parti> partiListe = FXCollections.observableArrayList();
+    Spiller spiller;
+    
     @Override
     public void start(Stage primaryStage){
           
@@ -53,35 +62,76 @@ public class Admapp extends Application{
        
         infoTxt = new Label("Legg til navnet for hver enkelt\n"
                 + "spiller som er med i turneringen,\n"
-                + "deretter legger du til dato for turnering,\n"
                 + "og så trykker du på opprett partier.\n"
                 + "Sørg for at listen alltid er partall\n"
                 + "da hvert parti trenger to spillere.");
         
         spillerLabel = new Label("Legg til spillere:");
         spillerNavn = new TextField();
+        
         knappLeggTil = new Button("Legg til spiller");
         knappLeggTil.setPadding(new Insets(8,17,8,17));
       
         knappNyttParti = new Button("Opprett partier");
         knappNyttParti.setPadding(new Insets(8,17,8,17));
-
+        
         
         sideMeny.getChildren().addAll(infoTxt, spillerLabel,spillerNavn,knappLeggTil, knappNyttParti);
         
         table = new TableView();
-         TableColumn<Spiller, String> spillerRad = new TableColumn<>("Spiller");
+        TableColumn<Spiller, String> spillerRad = new TableColumn<>("Spiller");
         spillerRad.setMinWidth(200);
-        spillerRad.setCellValueFactory(new PropertyValueFactory<>("Spiller"));
+        spillerRad.setCellValueFactory(new PropertyValueFactory<>("navn"));
+        
+        table.setItems(spillerListe);
         table.getColumns().addAll(spillerRad);
+       
+        knappLeggTil.setOnAction(e
+                -> {
+            if (!spillerNavn.getText().equals("") || spillerListe.size() < 20) {
+                spiller = new Spiller(); 
+                spiller.setNavn(spillerNavn.getText());
+                spillerListe.add(spiller);
+            }
+            else {
+                System.out.println("feil");
+            }
+
+        });
+        
+        
+       
+        knappNyttParti.setOnAction(e
+                -> {
+            Collections.shuffle(spillerListe);
+            if((spillerListe.size()%2) == 0  ) {
+                int lengde = spillerListe.size();
+                List<Spiller> spillere1;
+                List<Spiller> spillere2;
+                
+                spillere1 = spillerListe.subList(0, (lengde/2));
+                spillere2 = spillerListe.subList((lengde/2), lengde);
+                
+                for(int i=0; i<lengde/2; i++) {
+                    Parti parti = new Parti(spillere1.get(i), spillere2.get(i), "hei", "hwi");
+                    partiListe.add(parti);
+                }
+                
+                for(Parti p : partiListe){
+                    System.out.println(p.getSpiller1().getNavn() + " Vs " + p.getSpiller2().getNavn());
+                }
+                
+            }
+            else {
+                System.out.println("Spillere trenger en motstander!");
+            }
+
+        });
        
        root.setLeft(sideMeny);
        vindu.getChildren().add(table);
        root.setCenter(vindu);
        sceneEn= new Scene(root,BREDDE,HOYDE);
-       
- 
-       
        
        
         primaryStage.setTitle("AdminApp");
@@ -94,6 +144,5 @@ public class Admapp extends Application{
         launch(args);
         
     }
-    
     
 }

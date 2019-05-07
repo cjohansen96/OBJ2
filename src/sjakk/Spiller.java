@@ -6,6 +6,10 @@ public class Spiller implements Serializable,Comparable<Spiller>{
     private String navn;
     private double poeng;
     
+    public Spiller() {
+        
+    }
+    
     public Spiller(String navn, double poeng) {
         this.navn = navn;
         this.poeng = poeng;
@@ -18,6 +22,12 @@ public class Spiller implements Serializable,Comparable<Spiller>{
     public double getPoeng() {
         return poeng;
     }
+
+    public void setNavn(String navn) {
+        this.navn = navn;
+    }
+    
+    
 
     @Override
     public int compareTo(Spiller s) {
