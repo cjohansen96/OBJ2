@@ -5,9 +5,7 @@
  */
 package sjakk;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -66,7 +64,7 @@ public class SpillerApp extends Application {
     public void start(Stage primaryStage) {
         
        turnering = new Turnering();
-       spillerAnimasjon = new SpillerAnimasjon(); 
+       spillerAnimasjon = new SpillerAnimasjon();
        
        rootEn = new BorderPane();
        rootTo = new BorderPane();
@@ -131,6 +129,8 @@ public class SpillerApp extends Application {
            
            
            primaryStage.setScene(sceneTo);
+           spillerAnimasjon.byggBrett();
+          
            
        });
        

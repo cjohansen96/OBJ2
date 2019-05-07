@@ -22,14 +22,16 @@ public class SpillerAnimasjon extends Pane{
     public static final int BREDDE = 8;
     public static final int HOYDE = 8;
     
-    private Rute [][] brett = new Rute[BREDDE][HOYDE];
+    private Rute [][] brett;
     
     private Group ruteGruppe = new Group();
     private Group brikkeGruppe = new Group();
     
     
     public SpillerAnimasjon(){
+        super();
         
+        brett = new Rute[BREDDE][HOYDE];
         
         // Lager brettet, å setter start av brikkene
         setBorder(new Border(
@@ -41,24 +43,52 @@ public class SpillerAnimasjon extends Pane{
        
         setPrefSize(BREDDE * RUTE_STR, HOYDE * RUTE_STR);
         getChildren().addAll(ruteGruppe, brikkeGruppe);
-
+        
+        
+    }
+    public void byggBrett(){
+        //Alle rutene får ett rutenavn
+        String ruteNavn;
+        int num;
+        String[] bokstav = {"A","B","C","D","E","F","G","H"};
+        
         for (int y = 0; y < HOYDE; y++) {
+                
             for (int x = 0; x < BREDDE; x++) {
-                Rute rute = new Rute((x + y) % 2 == 0, x, y);
+                num = y+1;
+                ruteNavn = ""+bokstav[x]+num;
+                Rute rute = new Rute((x + y) % 2 == 0, x, y,ruteNavn);
                 brett[x][y] = rute;
 
                 ruteGruppe.getChildren().add(rute);
 
+                Brikke brikke = null;
+                
+                if(y == 0 || y == 7){
+                    
+                }
+                if(y == 1 || y == 6){
+                    if(HOYDE == 1){
+                       brikke = lagBrikke(x,y,"svart"); 
+                    }
+                    else
+                       brikke = lagBrikke(x,y,"hvit"); 
+                }
+                
+                
             }
             
         }
+    }
         
+    
+    
+    
+    private Brikke lagBrikke(int x, int y,String farge){
+       
+        Brikke brikke = new Brikke("Bonde",x,y,farge);
         
-      
-        
-        
-        
-        
+        return brikke;
     }
 
 }
