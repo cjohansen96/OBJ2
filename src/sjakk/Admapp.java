@@ -36,14 +36,14 @@ public class Admapp extends Application{
    private final static int BREDDE = 1000;
     private final static int HOYDE = 600;
     
-    BorderPane root;
-    StackPane vindu;
-    VBox sideMeny;
+    BorderPane root, rootTo;
+    StackPane vindu,vinduTo;
+    VBox sideMeny, sideMenyTo;
     TextField spillerNavn, datoFelt;
     Scene sceneEn,sceneTo;
-    Label spillerLabel, datoLabel, infoTxt;
-    Button knappLeggTil, knappDato, knappNyttParti;
-    TableView table;
+    Label spillerLabel, datoLabel, infoTxt, lagreLabel, infoLabel;
+    Button knappLeggTil, knappDato, knappNyttParti, knappLagre, knappNySpiller;
+    TableView table, tablePartier;
     
     ObservableList<Spiller> spillerListe = FXCollections.observableArrayList();
     ObservableList<Parti> partiListe = FXCollections.observableArrayList();
@@ -51,7 +51,7 @@ public class Admapp extends Application{
     
     @Override
     public void start(Stage primaryStage){
-          
+       //scene 1 styling   
        root = new BorderPane();
        vindu = new StackPane();
        vindu.setAlignment(Pos.CENTER);
@@ -85,7 +85,48 @@ public class Admapp extends Application{
         
         table.setItems(spillerListe);
         table.getColumns().addAll(spillerRad);
+        
+        //Scene 2 styling
+        rootTo = new BorderPane();
+       vinduTo = new StackPane();
+       vinduTo.setAlignment(Pos.CENTER);
        
+       sideMenyTo = new VBox(5);
+       sideMenyTo.setPadding(new Insets(40.0));
+       sideMenyTo.setStyle("-fx-background-color: #d1d1e0;");
+        
+        infoLabel = new Label("Legg til nye spillere:");
+        knappNySpiller = new Button("Legg til spiller");
+        knappNySpiller.setPadding(new Insets(8,17,8,17));
+        
+        lagreLabel = new Label("Lagre til fil");
+        knappLagre = new Button("Lagre");
+        knappLagre.setPadding(new Insets(8,17,8,17));
+        
+        sideMenyTo.getChildren().addAll(infoLabel, knappNySpiller, lagreLabel, knappLagre);
+        
+        tablePartier = new TableView();
+        
+        TableColumn<Parti, String> spiller1 = new TableColumn<>("Spiller 1");
+        spiller1.setMinWidth(200);
+        spiller1.setCellValueFactory(new PropertyValueFactory<>("spiller1"));
+        
+        TableColumn<Parti, String> spiller2 = new TableColumn<>("Spiller 2");
+        spiller2.setMinWidth(200);
+        spiller2.setCellValueFactory(new PropertyValueFactory<>("spiller2"));
+        
+        TableColumn<Parti, String> dato = new TableColumn<>("Dato");
+        dato.setMinWidth(200);
+        dato.setCellValueFactory(new PropertyValueFactory<>("dato"));
+        
+        TableColumn<Parti, String> klokkeSlett = new TableColumn<>("Klokkeslett");
+        klokkeSlett.setMinWidth(200);
+        klokkeSlett.setCellValueFactory(new PropertyValueFactory<>("klokkeSlett"));
+        
+        tablePartier.setItems(partiListe);
+        tablePartier.getColumns().addAll(spiller1, spiller2, dato, klokkeSlett);
+        
+        //action event på knappene
         knappLeggTil.setOnAction(e
                 -> {
             if (!spillerNavn.getText().equals("") || spillerListe.size() < 20) {
@@ -132,6 +173,11 @@ public class Admapp extends Application{
        vindu.getChildren().add(table);
        root.setCenter(vindu);
        sceneEn= new Scene(root,BREDDE,HOYDE);
+       
+       rootTo.setLeft(sideMenyTo);
+       vinduTo.getChildren().add(tablePartier);
+       rootTo.setCenter(vinduTo);
+       sceneTo= new Scene(rootTo,BREDDE,HOYDE);
        
        
         primaryStage.setTitle("AdminApp");
