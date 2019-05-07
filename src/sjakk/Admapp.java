@@ -1,19 +1,13 @@
 package sjakk;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -23,15 +17,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -153,7 +141,6 @@ public class Admapp extends Application{
             }
 
         });
-        
                
         knappNyttParti.setOnAction(e
                 -> {
@@ -167,8 +154,29 @@ public class Admapp extends Application{
                 spillere2 = spillerListe.subList((lengde/2), lengde);
                 
                 for(int i=0; i<lengde/2; i++) {
-                    Parti parti = new Parti(spillere1.get(i), spillere2.get(i), "12.05.2019", "12:00");
-                    partiListe.add(parti);
+                    GregorianCalendar calender = randomDato(1, 20);
+                    String tidsPunkt = randomDoubleMellom(10.00, 16.00);
+                    String datoStart = getStringDato(calender);
+                    
+                    String[] fullDato = datoStart.split("-");
+                    String dagDato = fullDato[0];
+                    int datoStartInt = Integer.parseInt(dagDato);
+                    double tidsPunktDouble = Double.parseDouble(tidsPunkt);
+                    
+                    boolean datoTidMatch = sjekkDatoOgTid(datoStartInt, tidsPunktDouble);
+                    //Så lnge datoTidMatch er false ikke gjør noe, hvis den er true bytt
+                    if(datoTidMatch) {
+                        Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt);
+                        partiListe.add(parti);
+                    }
+                    else {
+                        calender = randomDato(1, 20);
+                        randomDoubleMellom(10.00, 16.00);
+                        getStringDato(calender);
+                        Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt);
+                        partiListe.add(parti);
+                        
+                    }
                 } 
                 
                 primaryStage.setScene(sceneTo);
@@ -176,12 +184,13 @@ public class Admapp extends Application{
                 for(Parti p : partiListe){
                     System.out.println(p.getSpiller1().getNavn() + " Vs " + p.getSpiller2().getNavn());
                     int random = (int)(Math.random() * 3 + 1);
-            if(random == 1)
-            System.out.println("Hvit");
-            else if (random == 2)
-            System.out.println("Remis");
-            else 
-            System.out.println("Svart");
+                    
+                    if(random == 1)
+                        System.out.println("Hvit");
+                    else if (random == 2)
+                        System.out.println("Remis");
+                    else 
+                        System.out.println("Svart");
                 }
                 
             }
@@ -212,6 +221,51 @@ public class Admapp extends Application{
     public static void main(String[] args) {
         launch(args);
            
+    }
+
+    public boolean sjekkDatoOgTid(int dag, double klokke) {
+        for(Parti p : partiListe) {
+            String dato = p.getDato();
+            String[] fullDato = dato.split("-");
+            String dagDato = fullDato[0];
+            int dagDouble = Integer.parseInt(dagDato);
+            
+            String klokkeSlett = p.getKlokkeSlett();
+            double klokkeSlettDouble = Double.parseDouble(klokkeSlett);
+            
+            if(dagDouble == dag && klokkeSlettDouble == klokke) {
+                return false;
+            }
+            
+        }
+        return true;
+    }
+    
+    public String getStringDato(GregorianCalendar dato) {
+        SimpleDateFormat datoFormat = new SimpleDateFormat("dd-MM-yyyy");  
+        datoFormat.setCalendar(dato);
+        return datoFormat.format(dato.getTime()); 
+    }
+    
+    public String converterSpillereTilString(Spiller spiller1, Spiller spiller2) {
+        return spiller1.getNavn() + " - " + spiller2.getNavn();
+    }
+    
+    public static int createRandomIntBetween(int start, int end) {
+        return start + (int) Math.round(Math.random() * (end - start));
+    }
+    
+    public static String randomDoubleMellom(double start, double end) {
+        double tidsPunkt = start + Math.round(Math.random() * (end - start));
+        return Double.toString(tidsPunkt) + "0";
+    }
+
+    public static GregorianCalendar randomDato(int startDag, int sluttDag) {
+        int dag = createRandomIntBetween(startDag, sluttDag);
+        int måned = 4;
+        int år = 2019;
+        GregorianCalendar gc = new GregorianCalendar(år,måned,dag);
+        return gc;
     }
     
 }
