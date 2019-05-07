@@ -1,7 +1,11 @@
 package sjakk;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.application.Application;
@@ -36,14 +40,14 @@ public class Admapp extends Application{
    private final static int BREDDE = 1000;
     private final static int HOYDE = 600;
     
-    BorderPane root, rootTo;
-    StackPane vindu,vinduTo;
+    BorderPane root, rootTo, vinduTo;
+    StackPane vindu;
     VBox sideMeny, sideMenyTo;
     TextField spillerNavn, datoFelt;
     Scene sceneEn,sceneTo;
     Label spillerLabel, datoLabel, infoTxt, lagreLabel, infoLabel;
     Button knappLeggTil, knappDato, knappNyttParti, knappLagre, knappNySpiller;
-    TableView table, tablePartier;
+    TableView table, tablePartier, tableSpillere;
     
     ObservableList<Spiller> spillerListe = FXCollections.observableArrayList();
     ObservableList<Parti> partiListe = FXCollections.observableArrayList();
@@ -71,12 +75,15 @@ public class Admapp extends Application{
         
         knappLeggTil = new Button("Legg til spiller");
         knappLeggTil.setPadding(new Insets(8,17,8,17));
-      
+        
+        Label spaceLabel = new Label("");
+        spaceLabel.setPadding(new Insets(200,0,0,0));
+        
         knappNyttParti = new Button("Opprett partier");
         knappNyttParti.setPadding(new Insets(8,17,8,17));
         
         
-        sideMeny.getChildren().addAll(infoTxt, spillerLabel,spillerNavn,knappLeggTil, knappNyttParti);
+        sideMeny.getChildren().addAll(infoTxt, spillerLabel,spillerNavn,knappLeggTil, spaceLabel, knappNyttParti);
         
         table = new TableView();
         TableColumn<Spiller, String> spillerRad = new TableColumn<>("Spiller");
@@ -88,43 +95,49 @@ public class Admapp extends Application{
         
         //Scene 2 styling
         rootTo = new BorderPane();
-       vinduTo = new StackPane();
-       vinduTo.setAlignment(Pos.CENTER);
+       vinduTo = new BorderPane();
        
        sideMenyTo = new VBox(5);
        sideMenyTo.setPadding(new Insets(40.0));
        sideMenyTo.setStyle("-fx-background-color: #d1d1e0;");
         
-        infoLabel = new Label("Legg til nye spillere:");
-        knappNySpiller = new Button("Legg til spiller");
+        infoLabel = new Label("Legg til nye spillere\n"
+                            + "for å legge til nye partier");
+        knappNySpiller = new Button("Legg til spillere");
         knappNySpiller.setPadding(new Insets(8,17,8,17));
         
         lagreLabel = new Label("Lagre til fil");
+        lagreLabel.setPadding(new Insets(300,0,0,0));
         knappLagre = new Button("Lagre");
         knappLagre.setPadding(new Insets(8,17,8,17));
         
         sideMenyTo.getChildren().addAll(infoLabel, knappNySpiller, lagreLabel, knappLagre);
-        
+                
         tablePartier = new TableView();
         
-        TableColumn<Parti, String> spiller1 = new TableColumn<>("Spiller 1");
-        spiller1.setMinWidth(200);
-        spiller1.setCellValueFactory(new PropertyValueFactory<>("spiller1"));
-        
-        TableColumn<Parti, String> spiller2 = new TableColumn<>("Spiller 2");
-        spiller2.setMinWidth(200);
-        spiller2.setCellValueFactory(new PropertyValueFactory<>("spiller2"));
-        
         TableColumn<Parti, String> dato = new TableColumn<>("Dato");
-        dato.setMinWidth(200);
+        dato.setMinWidth(100);
         dato.setCellValueFactory(new PropertyValueFactory<>("dato"));
         
         TableColumn<Parti, String> klokkeSlett = new TableColumn<>("Klokkeslett");
-        klokkeSlett.setMinWidth(200);
+        klokkeSlett.setMinWidth(100);
         klokkeSlett.setCellValueFactory(new PropertyValueFactory<>("klokkeSlett"));
         
         tablePartier.setItems(partiListe);
-        tablePartier.getColumns().addAll(spiller1, spiller2, dato, klokkeSlett);
+        tablePartier.getColumns().addAll(dato, klokkeSlett);
+        
+        tableSpillere = new TableView();
+        
+        TableColumn<Spiller, String> spiller1 = new TableColumn<>("Spiller 1");
+        spiller1.setMinWidth(100);
+        spiller1.setCellValueFactory(new PropertyValueFactory<>("navn"));
+        
+        TableColumn<Spiller, String> spiller2 = new TableColumn<>("Spiller 2");
+        spiller2.setMinWidth(100);
+        spiller2.setCellValueFactory(new PropertyValueFactory<>("navn"));
+        
+        tableSpillere.setItems(spillerListe);
+        tableSpillere.getColumns().addAll(spiller1, spiller2);
         
         //action event på knappene
         knappLeggTil.setOnAction(e
@@ -133,6 +146,7 @@ public class Admapp extends Application{
                 spiller = new Spiller(); 
                 spiller.setNavn(spillerNavn.getText());
                 spillerListe.add(spiller);
+                spillerNavn.setText("");
             }
             else {
                 System.out.println("feil");
@@ -140,8 +154,7 @@ public class Admapp extends Application{
 
         });
         
-        
-       
+               
         knappNyttParti.setOnAction(e
                 -> {
             Collections.shuffle(spillerListe);
@@ -154,12 +167,21 @@ public class Admapp extends Application{
                 spillere2 = spillerListe.subList((lengde/2), lengde);
                 
                 for(int i=0; i<lengde/2; i++) {
-                    Parti parti = new Parti(spillere1.get(i), spillere2.get(i), "hei", "hwi");
+                    Parti parti = new Parti(spillere1.get(i), spillere2.get(i), "12.05.2019", "12:00");
                     partiListe.add(parti);
-                }
+                } 
+                
+                primaryStage.setScene(sceneTo);
                 
                 for(Parti p : partiListe){
                     System.out.println(p.getSpiller1().getNavn() + " Vs " + p.getSpiller2().getNavn());
+                    int random = (int)(Math.random() * 3 + 1);
+            if(random == 1)
+            System.out.println("Hvit");
+            else if (random == 2)
+            System.out.println("Remis");
+            else 
+            System.out.println("Svart");
                 }
                 
             }
@@ -175,8 +197,9 @@ public class Admapp extends Application{
        sceneEn= new Scene(root,BREDDE,HOYDE);
        
        rootTo.setLeft(sideMenyTo);
-       vinduTo.getChildren().add(tablePartier);
        rootTo.setCenter(vinduTo);
+       vinduTo.setLeft(tableSpillere);
+       vinduTo.setCenter(tablePartier);
        sceneTo= new Scene(rootTo,BREDDE,HOYDE);
        
        
@@ -188,7 +211,7 @@ public class Admapp extends Application{
 
     public static void main(String[] args) {
         launch(args);
-        
+           
     }
     
 }
