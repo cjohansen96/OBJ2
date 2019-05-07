@@ -32,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
 /**
  *
  * @author Markus
@@ -40,37 +41,47 @@ public class SpillerApp extends Application {
     
      
     private final static int BREDDE = 1000;
-    private final static int HOYDE = 700;
+    private final static int HOYDE = 800;
     
-    
-    BorderPane root;
+    //sceneEn
+    BorderPane rootEn;
+    BorderPane rootTo;
     StackPane vindu;
     VBox sideMeny;
     TextField tekstNavn;
     Scene sceneEn,sceneTo;
     
-    TableView<Spiller> table;
+    
+    //sceneTo
+    SpillerAnimasjon spillerAnimasjon;
+    VBox sideBar;
+    Turnering turnering;
+    
+    TableView<Spiller> sTable;
+    TableView<Parti> pTable;
+    
     ObservableList<Spiller> rankListe;
     ObservableList<Parti> partiListe;
     @Override
     public void start(Stage primaryStage) {
         
-     
-        
-       root = new BorderPane();
+       turnering = new Turnering();
+       spillerAnimasjon = new SpillerAnimasjon(); 
+       
+       rootEn = new BorderPane();
+       rootTo = new BorderPane();
        
        
-       
-       rankListe = Manager.getSpillere(); 
-        
+       sceneEn = new Scene(rootEn,BREDDE,HOYDE);
+       sceneTo = new Scene(rootTo,BREDDE,HOYDE);
        
        
        vindu = new StackPane();
        vindu.setBorder(new Border(
-            new BorderStroke(Color.BLUE, 
+            new BorderStroke(Color.BROWN, 
             BorderStrokeStyle.SOLID,
             CornerRadii.EMPTY,
-            BorderWidths.DEFAULT)));
+            new BorderWidths(3))));
         
        vindu.setAlignment(Pos.CENTER);
        
@@ -79,8 +90,11 @@ public class SpillerApp extends Application {
        
        
        Button knappRang = new Button("Rangering");
-       
        knappRang.setPadding(new Insets(8,17,8,17));
+       
+       
+       
+       
         
        Label ledeTekst = new Label("Finn spiller's parti");
        ledeTekst.setStyle("-fx-font-size: 10pt ");
@@ -100,14 +114,59 @@ public class SpillerApp extends Application {
         
        Button knappStart = new Button("Start");
        knappStart.setPadding(new Insets(8,17,8,17));
-       knappStart.setDisable(true);
-        
-        
-       sideMeny.getChildren().addAll(knappRang,ledeTekst,tekstNavn,knappSøk,ledeTekstAn,knappStart);
+     //knappStart.setDisable(true);
+     
+     
+       sideMeny.getChildren().addAll(
+       knappRang,
+       ledeTekst,
+       tekstNavn,
+       knappSøk,
+       ledeTekstAn,
+       knappStart);
+       
+     
+     
+      knappStart.setOnAction( e -> {
+           
+           
+           primaryStage.setScene(sceneTo);
+           
+       });
+       
+      
+      // Sidebar sceneTo
+      sideBar = new VBox();
+      sideBar.setPrefWidth(160);
+      sideBar.setAlignment(Pos.CENTER);
+      sideBar.setBorder(new Border(
+        new BorderStroke(Color.BROWN, 
+        BorderStrokeStyle.SOLID,
+        CornerRadii.EMPTY,
+        new BorderWidths(3))));
+      
+      Button knappTilbake = new Button("Tilbake");
+      knappTilbake.setPadding(new Insets(0,7,0,7));
+      knappTilbake.setOnAction(e ->{
+          primaryStage.setScene(sceneEn);
+      });
+      
+      
+      sideBar.getChildren().addAll(knappTilbake);
+      rootTo.setLeft(sideBar);
+      rootTo.setCenter(spillerAnimasjon);
+      
+      
+      
+      
+      
+      
+       
+       // View for RangeringListe
        
         // Navn kollone
         TableColumn<Spiller,String> Navn = new TableColumn<>("Navn");
-        Navn.setMinWidth(100);
+        Navn.setMinWidth(200);
         Navn.setCellValueFactory(new PropertyValueFactory<>("navn"));
         
         // Poeng kollone
@@ -115,24 +174,33 @@ public class SpillerApp extends Application {
         Poeng.setMinWidth(200);
         Poeng.setCellValueFactory(new PropertyValueFactory<>("poeng"));
         
-       
-        
-        table = new TableView<>();
-        
-        // add objekt to table
-        table.setItems(rankListe);
-        
-       
+        sTable = new TableView<>();
         // set table column
-        table.getColumns().addAll(Navn,Poeng);
+        sTable.getColumns().addAll(Navn,Poeng);
         
-        vindu.getChildren().add(table);
+      
+      
+         
+         
+         //View for Partier
+         
+         // Navn kollone
         
+         // partiListe = turnering.getPartier();   
         
        
-       root.setLeft(sideMeny);
-       root.setCenter(vindu);
-       sceneEn= new Scene(root,BREDDE,HOYDE);
+         
+       knappRang.setOnAction(e -> {
+        rankListe = turnering.getRangering();
+        sTable.setItems(rankListe);
+        vindu.getChildren().remove(sTable);
+        vindu.getChildren().add(sTable);
+       });
+         
+         
+       rootEn.setLeft(sideMeny);
+       rootEn.setCenter(vindu);
+       
        
        
         
@@ -140,6 +208,7 @@ public class SpillerApp extends Application {
         
        primaryStage.setTitle("SpillerApp");
        primaryStage.setScene(sceneEn);
+       primaryStage.setResizable(false);
        primaryStage.show();
     }
 
