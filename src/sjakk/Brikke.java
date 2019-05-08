@@ -27,13 +27,42 @@ public class Brikke extends StackPane{
      
         
         Ellipse ellipse = new Ellipse(RUTE_STR * 0.3125, RUTE_STR * 0.26);
-        if(this.farge.equals("svart")){
-        ellipse.setFill(Color.BLACK);
-        ellipse.setStroke(Color.BLACK);
+        
+        if(this.farge.equals("hvit")){
+            if(type.equals("Bonde"))
+                ellipse.setStyle("-fx-background-image: Bilder/HvitBonde.png");
+            else
+            if(type.equals("Tårn"))
+                 ellipse.setStyle("-fx-background-image: Bilder/HvitTårn.png");
+            else
+            if(type.equals("Hest"))
+                 ellipse.setStyle("-fx-background-image: Bilder/HvitHest.png");
+            else
+            if(type.equals("Dronning"))
+                 ellipse.setStyle("-fx-background-image: Bilder/HvitDronning.png");
+            else
+            if(type.equals("Konge"))
+                 ellipse.setStyle("-fx-background-image: Bilder/HvitKonge.png");
+                    
+        ellipse.setStroke(Color.WHITE);
         }
         else{
-        ellipse.setFill(Color.WHITE);
-        ellipse.setStroke(Color.WHITE);
+            if(type.equals("Bonde"))
+                ellipse.setStyle("-fx-background-image: Bilder/SvartBonde.png");
+            else
+            if(type.equals("Tårn"))
+                 ellipse.setStyle("-fx-background-image: Bilder/SvartTårn.png");
+            else
+            if(type.equals("Hest"))
+                 ellipse.setStyle("-fx-background-image: Bilder/SvartHest.png");
+            else
+            if(type.equals("Dronning"))
+                 ellipse.setStyle("-fx-background-image: Bilder/SvartDronning.png");
+            else
+            if(type.equals("Konge"))
+                 ellipse.setStyle("-fx-background-image: Bilder/SvartKonge.png");
+                    
+        ellipse.setStroke(Color.BLACK);
         }
         
         ellipse.setTranslateX((RUTE_STR - RUTE_STR * 0.3125 * 2) / 2);

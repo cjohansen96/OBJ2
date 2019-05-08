@@ -58,7 +58,7 @@ public class SpillerApp extends Application {
     Label vinner;
     TextArea textArea;
     VBox sideBar;
-    Turnering turnering;
+    
     
     TableView<Spiller> sTable;
     TableView<Parti> pTable;
@@ -68,7 +68,7 @@ public class SpillerApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-       turnering = new Turnering();
+       
        spillerAnimasjon = new SpillerAnimasjon();
        
        rootEn = new BorderPane();
@@ -138,7 +138,12 @@ public class SpillerApp extends Application {
           
            
        });
-       
+       knappSøk.setOnAction( e -> {
+           setParti();
+       });
+        knappRang.setOnAction( e -> {
+           setRangering();
+       });
       
       // Sidebar sceneTo
       sideBar = new VBox(10);
@@ -179,53 +184,15 @@ public class SpillerApp extends Application {
       
       
       sideBar.getChildren().addAll(vinner,textArea,knappTrekk,knappAni,knappTilbake);
+      
+      
+      
+      
       rootTo.setLeft(sideBar);
-      rootTo.setCenter(spillerAnimasjon);
+      rootTo.setCenter(spillerAnimasjon); 
       
-      
-      
-      
-      
-      
-       
-       // View for RangeringListe
-       
-        // Navn kollone
-        TableColumn<Spiller,String> Navn = new TableColumn<>("Navn");
-        Navn.setMinWidth(200);
-        Navn.setCellValueFactory(new PropertyValueFactory<>("navn"));
-        
-        // Poeng kollone
-        TableColumn<Spiller,Integer> Poeng = new TableColumn<>("Poeng");
-        Poeng.setMinWidth(200);
-        Poeng.setCellValueFactory(new PropertyValueFactory<>("poeng"));
-        
-        sTable = new TableView<>();
-        // set table column
-        sTable.getColumns().addAll(Navn,Poeng);
-        
-      
-      
-         
-         
-         //View for Partier
-         
-         // Navn kollone
-        
-         // partiListe = turnering.getPartier();   
-        
-       
-         
-       knappRang.setOnAction(e -> {
-        rankListe = turnering.getRangering();
-        sTable.setItems(rankListe);
-        vindu.getChildren().remove(sTable);
-        vindu.getChildren().add(sTable);
-       });
-         
-         
-       rootEn.setLeft(sideMeny);
-       rootEn.setCenter(vindu);
+      rootEn.setLeft(sideMeny);
+      rootEn.setCenter(vindu);
        
        
        
@@ -240,8 +207,32 @@ public class SpillerApp extends Application {
 
 
     
-    
-    
+    public void setRangering(){
+        
+        TableColumn<Spiller,String> Navn = new TableColumn<>("Navn");
+        Navn.setMinWidth(200);
+        Navn.setCellValueFactory(new PropertyValueFactory<>("navn"));
+        
+        // Poeng kollone
+        TableColumn<Spiller,Integer> Poeng = new TableColumn<>("Poeng");
+        Poeng.setMinWidth(200);
+        Poeng.setCellValueFactory(new PropertyValueFactory<>("poeng"));
+        
+        sTable = new TableView<>();
+        // set table column
+        sTable.getColumns().addAll(Navn,Poeng);
+        vindu.getChildren().remove(sTable);
+        vindu.getChildren().add(sTable);
+      
+       // rankListe = turnering.getRangering();
+       // sTable.setItems(rankListe);
+        
+        
+    }
+    public void setParti(){
+        
+         
+    }
   
         
     public static void main(String[] args) {

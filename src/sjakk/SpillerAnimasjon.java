@@ -151,6 +151,7 @@ public class SpillerAnimasjon extends Pane{
         }
         
         
+        
     }
         
     
