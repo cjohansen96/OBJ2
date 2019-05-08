@@ -1,6 +1,7 @@
 package sjakk;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -39,7 +40,9 @@ public class Admapp extends Application{
     
     ObservableList<Spiller> spillerListe = FXCollections.observableArrayList();
     ObservableList<Parti> partiListe = FXCollections.observableArrayList();
+    
     Spiller spiller;
+    Turnering turnering;
     
     @Override
     public void start(Stage primaryStage){
@@ -83,11 +86,11 @@ public class Admapp extends Application{
         
         //Scene 2 styling
         rootTo = new BorderPane();
-       vinduTo = new BorderPane();
+        vinduTo = new BorderPane();
        
-       sideMenyTo = new VBox(5);
-       sideMenyTo.setPadding(new Insets(40.0));
-       sideMenyTo.setStyle("-fx-background-color: #d1d1e0;");
+        sideMenyTo = new VBox(5);
+        sideMenyTo.setPadding(new Insets(40.0));
+        sideMenyTo.setStyle("-fx-background-color: #d1d1e0;");
         
         infoLabel = new Label("Legg til nye spillere\n"
                             + "for å legge til nye partier");
@@ -165,18 +168,17 @@ public class Admapp extends Application{
                     
                     boolean datoTidMatch = sjekkDatoOgTid(datoStartInt, tidsPunktDouble);
                     //Så lnge datoTidMatch er false ikke gjør noe, hvis den er true bytt
-                    if(datoTidMatch) {
-                        Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt);
-                        partiListe.add(parti);
-                    }
-                    else {
+                    while(datoTidMatch) {
                         calender = randomDato(1, 20);
                         randomDoubleMellom(10.00, 16.00);
                         getStringDato(calender);
-                        Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt);
-                        partiListe.add(parti);
-                        
+                        datoTidMatch = sjekkDatoOgTid(datoStartInt, tidsPunktDouble);
                     }
+                    
+                    Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt);
+                    partiListe.add(parti);
+                    turnering = new Turnering();
+                    turnering.leggTilParti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt, "hei", "hei");
                 } 
                 
                 primaryStage.setScene(sceneTo);
@@ -234,11 +236,11 @@ public class Admapp extends Application{
             double klokkeSlettDouble = Double.parseDouble(klokkeSlett);
             
             if(dagDouble == dag && klokkeSlettDouble == klokke) {
-                return false;
+                return true;
             }
             
         }
-        return true;
+        return false;
     }
     
     public String getStringDato(GregorianCalendar dato) {
