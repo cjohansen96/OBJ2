@@ -42,7 +42,7 @@ public class Admapp extends Application{
     ObservableList<Parti> partiListe = FXCollections.observableArrayList();
     
     Spiller spiller;
-    Turnering turnering;
+    Manager m;
     
     @Override
     public void start(Stage primaryStage){
@@ -177,8 +177,6 @@ public class Admapp extends Application{
                     
                     Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt);
                     partiListe.add(parti);
-                    turnering = new Turnering();
-                    turnering.leggTilParti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt, "hei", "hei");
                 } 
                 
                 primaryStage.setScene(sceneTo);
@@ -198,6 +196,20 @@ public class Admapp extends Application{
             }
             else {
                 System.out.println("Spillere trenger en motstander!");
+            }
+
+        });
+        
+        knappLagre.setOnAction(e
+                -> {
+            try {
+                for(Parti p : partiListe) {
+                    m = new Manager();
+                    m.addParti(p.getSpiller1(), p.getSpiller2(), p.getDato(), p.getKlokkeSlett(), "HVIT", "BondeE3,BondeD5,BondeE4,BondeD2,BondeE6,BondeD5,BondeE5,BondeD8,HestE7,KongeD5,LøperE3,HestD7,HestE2,DronningD4,DronningE4,KongeD5,LøperE6,DronningD4,KongeE5,HestD7,DronningE4,KongeD5,HestE7,HestD2,LøperE3,TårnD8,TårnE8,LøperD3,LøperE3,DronningD4,TårnE8,DronningD4,TårnE8,HestD2,DronningE4,LøperD3");
+                }
+            }
+            catch(ClassCastException x) {
+                System.out.println(x.getMessage());
             }
 
         });
