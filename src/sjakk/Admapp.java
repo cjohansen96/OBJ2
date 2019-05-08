@@ -26,15 +26,29 @@ import javafx.stage.Stage;
 
 public class Admapp extends Application{
 
-   private final static int BREDDE = 1000;
+    private final static int BREDDE = 1000;
     private final static int HOYDE = 600;
+    
+    //Datoer til parti
+    private final static int MONED = 4; //Hvilken måned tuneringen er
+    private final static int AR = 2019; //Hvilket år turneringen er
+  
+    private final static int START_DAG = 1; //Hvilken dag tuneringen starter
+    private final static int SLUTT_DAG = 20; //Hvilket dag turnering slutter
+    
+    private final static double START_KLOKKESLETT = 10.00; //Hvilken tid tuneringen starter
+    private final static double SLUTT_KLOKKESLETT = 16.00; //Hvilken tid turneringen slutter
+    
+    private String vinner;
+    private String trekk;
+    
     
     BorderPane root, rootTo, vinduTo;
     StackPane vindu;
     VBox sideMeny, sideMenyTo;
     TextField spillerNavn, datoFelt;
     Scene sceneEn,sceneTo;
-    Label spillerLabel, datoLabel, infoTxt, lagreLabel, infoLabel;
+    Label spillerLabel, datoLabel, infoTxt, lagreLabel, infoLabel, errorMelding;
     Button knappLeggTil, knappDato, knappNyttParti, knappLagre, knappNySpiller;
     TableView table, tablePartier, tableSpillere;
     
@@ -70,11 +84,14 @@ public class Admapp extends Application{
         Label spaceLabel = new Label("");
         spaceLabel.setPadding(new Insets(200,0,0,0));
         
+        errorMelding = new Label("");
+        errorMelding.setVisible(false);
+        
         knappNyttParti = new Button("Opprett partier");
         knappNyttParti.setPadding(new Insets(8,17,8,17));
         
         
-        sideMeny.getChildren().addAll(infoTxt, spillerLabel,spillerNavn,knappLeggTil, spaceLabel, knappNyttParti);
+        sideMeny.getChildren().addAll(infoTxt, spillerLabel,spillerNavn,knappLeggTil,errorMelding, spaceLabel,  knappNyttParti);
         
         table = new TableView();
         TableColumn<Spiller, String> spillerRad = new TableColumn<>("Spiller");
@@ -99,7 +116,7 @@ public class Admapp extends Application{
         
         lagreLabel = new Label("Lagre til fil");
         lagreLabel.setPadding(new Insets(300,0,0,0));
-        knappLagre = new Button("Lagre");
+        knappLagre = new Button("Lagre og avslutt");
         knappLagre.setPadding(new Insets(8,17,8,17));
         
         sideMenyTo.getChildren().addAll(infoLabel, knappNySpiller, lagreLabel, knappLagre);
@@ -133,14 +150,21 @@ public class Admapp extends Application{
         //action event på knappene
         knappLeggTil.setOnAction(e
                 -> {
-            if (!spillerNavn.getText().equals("") || spillerListe.size() < 20) {
+            if (spillerNavn.getText().equals("")) {
+                errorMelding.setText("Skriv inn navn!");
+                errorMelding.setVisible(true);
+            }
+            else if(spillerListe.size() >= 20){
+                errorMelding.setText("Kan ikke ha fler en 20 i en tunering!");
+                errorMelding.setVisible(true);
+                
+            }
+            else {
                 spiller = new Spiller(); 
                 spiller.setNavn(spillerNavn.getText());
                 spillerListe.add(spiller);
                 spillerNavn.setText("");
-            }
-            else {
-                System.out.println("feil");
+                errorMelding.setVisible(false);
             }
 
         });
@@ -157,8 +181,8 @@ public class Admapp extends Application{
                 spillere2 = spillerListe.subList((lengde/2), lengde);
                 
                 for(int i=0; i<lengde/2; i++) {
-                    GregorianCalendar calender = randomDato(1, 20);
-                    String tidsPunkt = randomDoubleMellom(10.00, 16.00);
+                    GregorianCalendar calender = randomDato(START_DAG, SLUTT_DAG);
+                    String tidsPunkt = randomDoubleMellom(START_KLOKKESLETT, SLUTT_KLOKKESLETT);
                     String datoStart = getStringDato(calender);
                     
                     String[] fullDato = datoStart.split("-");
@@ -169,13 +193,16 @@ public class Admapp extends Application{
                     boolean datoTidMatch = sjekkDatoOgTid(datoStartInt, tidsPunktDouble);
                     //Så lnge datoTidMatch er false ikke gjør noe, hvis den er true bytt
                     while(datoTidMatch) {
-                        calender = randomDato(1, 20);
-                        randomDoubleMellom(10.00, 16.00);
+                        calender = randomDato(START_DAG, SLUTT_DAG);
+                        randomDoubleMellom(START_KLOKKESLETT, SLUTT_KLOKKESLETT);
                         getStringDato(calender);
                         datoTidMatch = sjekkDatoOgTid(datoStartInt, tidsPunktDouble);
                     }
                     
-                    Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt);
+                    trekk = "BondeD5,BondeE4,BondeD2,BondeE6,BondeD5,BondeE5,BondeD8,HestE7,KongeD5,LøperE3,HestD7,HestE2,DronningD4,DronningE4,KongeD5,LøperE6,DronningD4,KongeE5,HestD7,DronningE4,KongeD5,HestE7,HestD2,LøperE3,TårnD8,TårnE8,LøperD3,LøperE3,DronningD4,TårnE8,DronningD4,TårnE8,HestD2,DronningE4,LøperD3";
+                    vinner = getVinner(trekk);
+                    
+                    Parti parti = new Parti(spillere1.get(i), spillere2.get(i), datoStart, tidsPunkt, trekk, vinner);
                     partiListe.add(parti);
                 } 
                 
@@ -183,35 +210,41 @@ public class Admapp extends Application{
                 
                 for(Parti p : partiListe){
                     System.out.println(p.getSpiller1().getNavn() + " Vs " + p.getSpiller2().getNavn());
-                    int random = (int)(Math.random() * 3 + 1);
-                    
-                    if(random == 1)
-                        System.out.println("Hvit");
-                    else if (random == 2)
-                        System.out.println("Remis");
-                    else 
-                        System.out.println("Svart");
                 }
                 
             }
             else {
-                System.out.println("Spillere trenger en motstander!");
+                errorMelding.setText("Alle spillerer må ha en motsatander!");
+                errorMelding.setVisible(true);
             }
 
         });
         
         knappLagre.setOnAction(e
                 -> {
-            try {
-                for(Parti p : partiListe) {
-                    m = new Manager();
-                    m.addParti(p.getSpiller1(), p.getSpiller2(), p.getDato(), p.getKlokkeSlett(), "HVIT", "BondeE3,BondeD5,BondeE4,BondeD2,BondeE6,BondeD5,BondeE5,BondeD8,HestE7,KongeD5,LøperE3,HestD7,HestE2,DronningD4,DronningE4,KongeD5,LøperE6,DronningD4,KongeE5,HestD7,DronningE4,KongeD5,HestE7,HestD2,LøperE3,TårnD8,TårnE8,LøperD3,LøperE3,DronningD4,TårnE8,DronningD4,TårnE8,HestD2,DronningE4,LøperD3");
+            for(Parti p : partiListe) {
+                m = new Manager();
+                m.addParti(p.getSpiller1(), p.getSpiller2(), p.getDato(), p.getKlokkeSlett(), vinner, trekk);
+                /*
+                String spillerVinner = "";
+                if(p.getResultat().equals("VINNER"))
+                    spillerVinner = p.getSpiller1().getNavn();
+                else
+                    spillerVinner = p.getSpiller2().getNavn();
+                
+                for(Spiller s: rangeringsFil) {
+                    String rangeringSpiller = s.getNavn();
+                    
+                    if(spillerVinner.equals(rangeringSpiller)){
+                        
+                    }
+                    
                 }
+*/
             }
-            catch(ClassCastException x) {
-                System.out.println(x.getMessage());
-            }
-
+                
+            
+            primaryStage.close();
         });
        
        root.setLeft(sideMeny);
@@ -276,10 +309,18 @@ public class Admapp extends Application{
 
     public static GregorianCalendar randomDato(int startDag, int sluttDag) {
         int dag = createRandomIntBetween(startDag, sluttDag);
-        int måned = 4;
-        int år = 2019;
+        int måned = MONED;
+        int år = AR;
         GregorianCalendar gc = new GregorianCalendar(år,måned,dag);
         return gc;
     }
     
+    public String getVinner(String trekk) {
+        String[] trekkLengde = trekk.split(",");
+        
+        if((trekkLengde.length%2) == 0)
+            return "TAP";
+        else
+            return "VINNER";
+    }
 }
