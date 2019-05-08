@@ -25,7 +25,7 @@ public class Brikke extends StackPane{
         this.type = type;
         this.farge = farge;
         
-        startPlass(x,y);
+        flytt(x,y);
         
     
         
@@ -96,7 +96,7 @@ public class Brikke extends StackPane{
         
         
     }
-    public void startPlass(int x,int y){
+    public void flytt(int x,int y){
         gammelX = x * RUTE_STR;
         gammelY = y * RUTE_STR;
         relocate(gammelX,gammelY);

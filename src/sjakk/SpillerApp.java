@@ -59,7 +59,8 @@ public class SpillerApp extends Application {
     
     TableView<Spiller> sTable;
     TableView<Parti> pTable;
-    
+    Parti valgtParti;
+    int antTrekk;
     ObservableList<Spiller> rankListe;
     ObservableList<Parti> partiListe;
     @Override
@@ -129,8 +130,9 @@ public class SpillerApp extends Application {
      
       knappStart.setOnAction( e -> {
            
-           
+           valgtParti = pTable.getSelectionModel().getSelectedItem();
            primaryStage.setScene(sceneTo);
+           
            spillerAnimasjon.byggBrett();
           
            
@@ -173,9 +175,8 @@ public class SpillerApp extends Application {
       
       knappTrekk.setOnAction( e -> {
           
-          // Skal sende parti.getTrekk ifra den valgte i tableview
-          String trekk = spillerAnimasjon.lagTrekk();
-          spillerAnimasjon.nesteTrekk(trekk);
+          spillerAnimasjon.nesteTrekk(valgtParti,antTrekk);
+          antTrekk++;
       });
       
       
