@@ -53,7 +53,7 @@ public class SpillerApp extends Application {
     //sceneTo
     SpillerAnimasjon spillerAnimasjon;
     Label vinner;
-    TextArea textArea;
+    TextArea tekstArea;
     VBox sideBar;
     
     
@@ -156,8 +156,8 @@ public class SpillerApp extends Application {
       
       vinner = new Label("Vinner:");
       vinner.setFont(Font.font(null, FontWeight.BOLD, 14));
-      textArea = new TextArea();
-      textArea.setPrefSize(70,500);
+      tekstArea = new TextArea();
+      tekstArea.setPrefSize(70,500);
       
       Button knappTilbake = new Button("Tilbake");
       knappTilbake.setFont(Font.font(null, FontWeight.BOLD, 14));
@@ -175,7 +175,31 @@ public class SpillerApp extends Application {
       
       knappTrekk.setOnAction( e -> {
           
-          spillerAnimasjon.nesteTrekk(valgtParti,antTrekk);
+          
+          
+          String[] trekk = valgtParti.getTrekk().split(",");
+          int partiLengde = trekk.length;
+          
+          if(antTrekk < trekk.length){
+          String rute = trekk[antTrekk].substring(trekk[antTrekk].length()-2,trekk[antTrekk].length());
+          tekstArea.appendText(trekk[antTrekk]+", \n");
+          
+          
+          spillerAnimasjon.nesteTrekk(valgtParti,rute,antTrekk);
+          }
+          else{
+              if(trekk.length % 2 == 0){
+              knappTrekk.setDisable(true);
+              vinner.setText(vinner.getText() +" Svart Vant");
+              vinner.setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold");
+              }
+              else{
+              knappTrekk.setDisable(true);
+              vinner.setText(vinner.getText() +" Hvit Vant"); 
+              vinner.setStyle("-fx-text-fill: green; -fx-font-size: 16px; -fx-font-weight: bold");
+              }
+          }
+          
           antTrekk++;
       });
       
@@ -188,7 +212,7 @@ public class SpillerApp extends Application {
       
       
       
-      sideBar.getChildren().addAll(vinner,textArea,knappTrekk,knappAni,knappTilbake);
+      sideBar.getChildren().addAll(vinner,tekstArea,knappTrekk,knappAni,knappTilbake);
       
       
       

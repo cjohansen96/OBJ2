@@ -236,14 +236,20 @@ public class SpillerAnimasjon extends Pane{
         return trekk;
     }
     
-    public void nesteTrekk(Parti parti,int ant){
+    public void nesteTrekk(Parti parti,String rute,int ant){
       
-    String[] trekk = parti.getTrekk().split(",");
-    
+     if(ant % 2 == 0){
+         
+     }
+     else{
+         
+     }
+         
+        
     /*
     piece.move(newX, newY);
     board[x0][y0].setPiece(null);
-    board[newX][newY].setPiece(piece);
+    board[newX][newY ].setPiece(piece);
    
     
     
@@ -256,12 +262,6 @@ public class SpillerAnimasjon extends Pane{
             relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
         });
       */  
-    }
-    
-    
-    
-    
-    
-    
+    }    
     
 }
