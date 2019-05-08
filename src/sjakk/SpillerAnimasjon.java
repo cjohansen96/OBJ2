@@ -236,6 +236,12 @@ public class SpillerAnimasjon extends Pane{
         return trekk;
     }
     
+    public void nesteTrekk(String trekk){
+        
+        
+        
+    }
+    
     
     
     

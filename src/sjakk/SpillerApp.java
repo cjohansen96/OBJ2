@@ -6,6 +6,7 @@
 package sjakk;
 
 
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,6 +45,7 @@ public class SpillerApp extends Application {
     private final static int BREDDE = 1000;
     private final static int HOYDE = 800;
     
+    Manager mg;
     //sceneEn
     BorderPane rootEn;
     BorderPane rootTo;
@@ -68,7 +70,7 @@ public class SpillerApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-       
+       mg = new Manager();
        spillerAnimasjon = new SpillerAnimasjon();
        
        rootEn = new BorderPane();
@@ -174,6 +176,13 @@ public class SpillerApp extends Application {
       knappTrekk.setStyle("-fx-background-color: #5ff441");
       knappTrekk.setPadding(new Insets(12,7,12,7));
       
+      knappTrekk.setOnAction( e -> {
+          
+          // Skal sende parti.getTrekk ifra den valgte i tableview
+          String trekk = spillerAnimasjon.lagTrekk();
+          spillerAnimasjon.nesteTrekk(trekk);
+      });
+      
       
       
       Button knappAni = new Button("Se parti");
@@ -230,6 +239,30 @@ public class SpillerApp extends Application {
         
     }
     public void setParti(){
+        ArrayList<Parti> liste = mg.getPartier();
+        
+        for(Parti p: liste){
+           partiListe.add(p); 
+        }
+        
+   
+    
+        pTable = new TableView<>();
+        pTable.setItems(partiListe);
+        TableColumn<Parti,String> dato = new TableColumn<>("Dato");
+        dato.setMinWidth(30);
+        dato.setCellValueFactory(new PropertyValueFactory<>("dato"));
+        
+        TableColumn<Parti,String> klslett = new TableColumn<>("KlSlett");
+        klslett.setMinWidth(30);
+        klslett.setCellValueFactory(new PropertyValueFactory<>("klokkeSlett"));
+        
+        TableColumn<Parti,String> resultat = new TableColumn<>("Resultat");
+        resultat.setMinWidth(30);
+        resultat.setCellValueFactory(new PropertyValueFactory<>("vinner"));
+        
+        pTable.getColumns().addAll(dato,klslett,resultat);
+        
         
          
     }
