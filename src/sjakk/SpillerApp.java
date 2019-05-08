@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sjakk;
 
 
@@ -53,7 +48,7 @@ public class SpillerApp extends Application {
     VBox sideMeny;
     TextField tekstNavn;
     Scene sceneEn,sceneTo;
-    
+    Button knappStart;
     
     //sceneTo
     SpillerAnimasjon spillerAnimasjon;
@@ -117,9 +112,9 @@ public class SpillerApp extends Application {
        ledeTekstAn.setStyle("-fx-font-weight: bold");
        ledeTekstAn.setPadding(new Insets(60,0,0,0));
         
-       Button knappStart = new Button("Start");
+       knappStart = new Button("Start");
        knappStart.setPadding(new Insets(8,17,8,17));
-     //knappStart.setDisable(true);
+       knappStart.setDisable(true);
      
      
        sideMeny.getChildren().addAll(
@@ -218,6 +213,8 @@ public class SpillerApp extends Application {
     
     public void setRangering(){
         
+        
+        
         TableColumn<Spiller,String> Navn = new TableColumn<>("Navn");
         Navn.setMinWidth(200);
         Navn.setCellValueFactory(new PropertyValueFactory<>("navn"));
@@ -241,6 +238,17 @@ public class SpillerApp extends Application {
     public void setParti(){
         
         pTable = new TableView<>();
+        pTable.setOnMouseClicked(e -> {
+            
+            if(pTable.getSelectionModel().getSelectedItem() != null){
+                
+                 knappStart.setDisable(false);
+            }
+            else {
+                knappStart.setDisable(true);
+            }
+        });
+       
         String søktNavn = tekstNavn.getText();
         
        ArrayList<Parti> liste = mg.getPartier();
@@ -257,6 +265,7 @@ public class SpillerApp extends Application {
            
            if(pNavnEn.equals(søktNavn) || pNavnTo.equals(søktNavn)){
                utListe.add(liste.get(i));
+                
               
            }
             
@@ -269,15 +278,16 @@ public class SpillerApp extends Application {
         
         pTable.setItems(partiListe);
         TableColumn<Parti,String> dato = new TableColumn<>("Dato");
-        dato.setMinWidth(pTable.getWidth()/3);
+        dato.setMinWidth(230);
+        
         dato.setCellValueFactory(new PropertyValueFactory<>("dato"));
         
         TableColumn<Parti,String> klslett = new TableColumn<>("KlSlett");
-        klslett.setMinWidth(pTable.getWidth()/3);
+        klslett.setMinWidth(200);
         klslett.setCellValueFactory(new PropertyValueFactory<>("klokkeSlett"));
         
         TableColumn<Parti,String> resultat = new TableColumn<>("Resultat");
-        resultat.setMinWidth(pTable.getWidth()/3);
+        resultat.setMinWidth(200);
         resultat.setCellValueFactory(new PropertyValueFactory<>("vinner"));
         
         pTable.getColumns().addAll(dato,klslett,resultat);
