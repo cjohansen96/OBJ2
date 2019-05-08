@@ -23,7 +23,7 @@ public class SpillerAnimasjon extends Pane{
     public static final int HOYDE = 8;
     
     private Rute [][] brett;
-    String[] brikkeFørste = {"Tårn","Hest","Løper","Dronning","Konge","Løper","Hest","Tårn"};
+    String[] brikkeFørste = {"Tårn","Hest","Springer","Dronning","Konge","Springer","Hest","Tårn"};
     
     private Group ruteGruppe = new Group();
     private Group brikkeGruppe = new Group();
