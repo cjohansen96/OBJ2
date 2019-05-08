@@ -11,13 +11,13 @@ public class Parti implements Serializable{
     private String trekk;
 
     
-    public Parti(Spiller spiller1, Spiller spiller2, String dato, String klokkeSlett, String vinner, String trekk) {
+    public Parti(Spiller spiller1, Spiller spiller2, String dato, String klokkeSlett, String vinner) {
         this.spiller1 = spiller1;
         this.spiller2 = spiller2;
         this.dato = dato;
         this.klokkeSlett = klokkeSlett;
         this.vinner = vinner;
-        this.trekk = trekk;
+        //this.trekk = lagTrekk();
     }
     
     public Parti(Spiller spiller1, Spiller spiller2, String dato, String klokkeSlett) {
@@ -57,11 +57,12 @@ public class Parti implements Serializable{
         this.vinner = resultat;
     }
 
-    public void setTrekk(String trekk) {
-        this.trekk = trekk;
+    /*public String lagTrekk(){
+        
+        
     }
     
-    
+    */
     
     
         

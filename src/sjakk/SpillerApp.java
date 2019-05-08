@@ -29,8 +29,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Background;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 /**
  *
  * @author Markus
@@ -52,6 +55,8 @@ public class SpillerApp extends Application {
     
     //sceneTo
     SpillerAnimasjon spillerAnimasjon;
+    Label vinner;
+    TextArea textArea;
     VBox sideBar;
     Turnering turnering;
     
@@ -136,7 +141,7 @@ public class SpillerApp extends Application {
        
       
       // Sidebar sceneTo
-      sideBar = new VBox();
+      sideBar = new VBox(10);
       sideBar.setPrefWidth(160);
       sideBar.setAlignment(Pos.CENTER);
       sideBar.setBorder(new Border(
@@ -145,14 +150,35 @@ public class SpillerApp extends Application {
         CornerRadii.EMPTY,
         new BorderWidths(3))));
       
+      vinner = new Label("Vinner:");
+      vinner.setFont(Font.font(null, FontWeight.BOLD, 14));
+      textArea = new TextArea();
+      textArea.setPrefSize(70,500);
+      
       Button knappTilbake = new Button("Tilbake");
+      knappTilbake.setFont(Font.font(null, FontWeight.BOLD, 14));
+      knappTilbake.setStyle("-fx-background-color: #f44242");
       knappTilbake.setPadding(new Insets(0,7,0,7));
+      
+      
       knappTilbake.setOnAction(e ->{
           primaryStage.setScene(sceneEn);
       });
+      Button knappTrekk = new Button("Neste trekk");
+      knappTrekk.setFont(Font.font(null, FontWeight.BOLD, 14));
+      knappTrekk.setStyle("-fx-background-color: #5ff441");
+      knappTrekk.setPadding(new Insets(12,7,12,7));
       
       
-      sideBar.getChildren().addAll(knappTilbake);
+      
+      Button knappAni = new Button("Se parti");
+      knappAni.setFont(Font.font(null, FontWeight.BOLD, 14));
+      knappAni.setStyle("-fx-background-color: #5ff441");
+      knappAni.setPadding(new Insets(12,7,12,7));
+      
+      
+      
+      sideBar.getChildren().addAll(vinner,textArea,knappTrekk,knappAni,knappTilbake);
       rootTo.setLeft(sideBar);
       rootTo.setCenter(spillerAnimasjon);
       

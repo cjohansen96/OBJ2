@@ -48,6 +48,11 @@ public class Brikke extends StackPane{
         gammelY = y * RUTE_STR;
         relocate(gammelX,gammelY);
     }
+  
 
+    public String getType() {
+        return type;
+    }
+    
    
 }

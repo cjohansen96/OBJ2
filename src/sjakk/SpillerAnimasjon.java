@@ -45,27 +45,32 @@ public class SpillerAnimasjon extends Pane{
         setPrefSize(BREDDE * RUTE_STR, HOYDE * RUTE_STR);
         getChildren().addAll(ruteGruppe, brikkeGruppe);
         
+       
         
     }
+
+  
     public void byggBrett(){
         //Alle rutene får ett rutenavn
+        
         String ruteNavn;
         int num;
         String[] bokstav = {"A","B","C","D","E","F","G","H"};
         
         for (int y = 0; y < HOYDE; y++) {
-                
+               num = y +1; 
             for (int x = 0; x < BREDDE; x++) {
-                num = x+1;
+               
                 ruteNavn = ""+bokstav[x]+num;
                 Rute rute = new Rute((x + y) % 2 == 0, x, y,ruteNavn);
                 brett[x][y] = rute;
                 
-
+               
                 ruteGruppe.getChildren().add(rute);
 
                 Brikke brikke = null;
-                System.out.println(ruteNavn);
+               
+             
                 if(y == 0 || y == 7){
                     switch(x) {
                         case 0:
@@ -119,10 +124,7 @@ public class SpillerAnimasjon extends Pane{
                        
                      
                    }
-                     if(brikke != null){
-                        rute.setBrikke(brikke);
-                        brikkeGruppe.getChildren().add(brikke);
-                    }
+                    
                 }
                    
             
@@ -134,17 +136,21 @@ public class SpillerAnimasjon extends Pane{
                        brikke = lagBrikke("Bonde",x,y,"hvit"); 
                        
                     }
-                    if(brikke != null){
-                        rute.setBrikke(brikke);
-                        brikkeGruppe.getChildren().add(brikke);
-                    }
+                    
                     
                    
                 
                 
                 }
+                if(brikke != null){
+                        rute.setBrikke(brikke);
+                        brikkeGruppe.getChildren().add(brikke);
+                        
+                    }
             }
         }
+        
+        
     }
         
     
@@ -157,4 +163,81 @@ public class SpillerAnimasjon extends Pane{
         return brikke;
     }
 
+    
+    public String lagTrekk(){
+        
+        int ant = (int)(Math.random() * 10 + 1);
+        
+        int y = (int)(Math.random() * 2 + 1);
+        int brikke;
+        String trekk = "";
+        
+        
+        // BONDE
+        for(int i=0; i < 8; i++){
+           
+            if((i%2)==0){
+            brikke = (int)(Math.random() *7 + 1);
+            
+            Rute brikkeFra = brett[brikke][6];
+            if(brikkeFra.harBrikke()){
+                
+               Rute brikkeTil = brett[6-y][brikke];
+                  trekk += ""+brikkeFra.getBrikke().getType()+brikkeTil.getrNavn()+","; 
+            }
+               
+            
+            
+            
+            }
+            else{
+            brikke = (int)(Math.random() *7 + 1);
+            Rute brikkeFra = brett[brikke][1];
+            if(brikkeFra.harBrikke()){
+            Rute brikkeTil = brett[1+y][brikke];
+            trekk += ""+brikkeFra.getBrikke().getType()+brikkeTil.getrNavn()+","; 
+            }
+               
+            }
+             
+         }
+        
+        // Bakrekka
+        for(int i=0; i < 28; i++){
+           
+            if((i%2)==0){
+            brikke = (int)(Math.random() *7 + 1);
+            
+            Rute brikkeFra = brett[brikke][7];
+            if(brikkeFra.harBrikke()){
+                
+               Rute brikkeTil = brett[6-y][brikke];
+                  trekk += ""+brikkeFra.getBrikke().getType()+brikkeTil.getrNavn()+","; 
+            }
+               
+            
+            
+            
+            }
+            else{
+            brikke = (int)(Math.random() *7 + 1);
+            Rute brikkeFra = brett[brikke][0];
+            if(brikkeFra.harBrikke()){
+            Rute brikkeTil = brett[1+y][brikke];
+            trekk += ""+brikkeFra.getBrikke().getType()+brikkeTil.getrNavn()+","; 
+            }
+               
+            }
+             
+         }
+           
+        
+        return trekk;
+    }
+    
+    
+    
+    
+    
+    
 }

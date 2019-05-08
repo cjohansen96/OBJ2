@@ -39,7 +39,6 @@ public class Rute extends Rectangle{
     public String getrNavn() {
         return rNavn;
     }
-    
-    
+   
     
 }

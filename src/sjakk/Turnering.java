@@ -31,8 +31,7 @@ public class Turnering {
                                       spiller2, 
                                       dato,
                                       klokkeSlett,
-                                      vinner,
-                                      trekk));
+                                      vinner));
         
         //oppdaterer partiListe etter ny lagt til
         partiListe = getPartier();
