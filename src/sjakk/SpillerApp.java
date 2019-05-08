@@ -88,7 +88,7 @@ public class SpillerApp extends Application {
             CornerRadii.EMPTY,
             new BorderWidths(3))));
         
-       vindu.setAlignment(Pos.CENTER);
+       
        
        sideMeny = new VBox(10);
        sideMeny.setPadding(new Insets(60.0));
@@ -101,7 +101,7 @@ public class SpillerApp extends Application {
        
        
         
-       Label ledeTekst = new Label("Finn spiller's parti");
+       Label ledeTekst = new Label("Finn spiller's parti(Stor forbokstav)");
        ledeTekst.setStyle("-fx-font-size: 10pt ");
        ledeTekst.setStyle("-fx-font-weight: bold");
        ledeTekst.setPadding(new Insets(60,0,0,0));
@@ -239,32 +239,52 @@ public class SpillerApp extends Application {
         
     }
     public void setParti(){
-        ArrayList<Parti> liste = mg.getPartier();
         
-        for(Parti p: liste){
-           partiListe.add(p); 
-        }
-        
-   
-    
         pTable = new TableView<>();
+        String søktNavn = tekstNavn.getText();
+        
+       ArrayList<Parti> liste = mg.getPartier();
+       ArrayList<Parti> utListe = new <Parti> ArrayList();
+        
+       
+       boolean fant = false;
+       String pNavnEn;
+       String pNavnTo;
+       
+       for(int i=0; i<liste.size();i++){
+           pNavnEn = liste.get(i).getSpiller1().getNavn();
+           pNavnTo = liste.get(i).getSpiller2().getNavn();
+           
+           if(pNavnEn.equals(søktNavn) || pNavnTo.equals(søktNavn)){
+               utListe.add(liste.get(i));
+              
+           }
+            
+       }
+       
+       partiListe = FXCollections.observableArrayList(utListe);
+       pTable.setItems(partiListe);
+   
+
+        
         pTable.setItems(partiListe);
         TableColumn<Parti,String> dato = new TableColumn<>("Dato");
-        dato.setMinWidth(30);
+        dato.setMinWidth(pTable.getWidth()/3);
         dato.setCellValueFactory(new PropertyValueFactory<>("dato"));
         
         TableColumn<Parti,String> klslett = new TableColumn<>("KlSlett");
-        klslett.setMinWidth(30);
+        klslett.setMinWidth(pTable.getWidth()/3);
         klslett.setCellValueFactory(new PropertyValueFactory<>("klokkeSlett"));
         
         TableColumn<Parti,String> resultat = new TableColumn<>("Resultat");
-        resultat.setMinWidth(30);
+        resultat.setMinWidth(pTable.getWidth()/3);
         resultat.setCellValueFactory(new PropertyValueFactory<>("vinner"));
         
         pTable.getColumns().addAll(dato,klslett,resultat);
         
         
-         
+        vindu.getChildren().remove(pTable);
+        vindu.getChildren().addAll(pTable);
     }
   
         

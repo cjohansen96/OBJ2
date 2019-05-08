@@ -38,13 +38,16 @@ public class Brikke extends StackPane{
             if(type.equals("Hest"))
                  ellipse.setStyle("-fx-background-image: Bilder/HvitHest.png");
             else
+            if(type.equals("Springer"))
+                 ellipse.setStyle("-fx-background-image: Bilder/HvitSpringer.png");
+            else
             if(type.equals("Dronning"))
                  ellipse.setStyle("-fx-background-image: Bilder/HvitDronning.png");
             else
             if(type.equals("Konge"))
                  ellipse.setStyle("-fx-background-image: Bilder/HvitKonge.png");
                     
-        ellipse.setStroke(Color.WHITE);
+        
         }
         else{
             if(type.equals("Bonde"))
@@ -56,13 +59,16 @@ public class Brikke extends StackPane{
             if(type.equals("Hest"))
                  ellipse.setStyle("-fx-background-image: Bilder/SvartHest.png");
             else
+            if(type.equals("Springer"))
+                 ellipse.setStyle("-fx-background-image: Bilder/SvartSpringer.png");
+            else
             if(type.equals("Dronning"))
                  ellipse.setStyle("-fx-background-image: Bilder/SvartDronning.png");
             else
             if(type.equals("Konge"))
                  ellipse.setStyle("-fx-background-image: Bilder/SvartKonge.png");
                     
-        ellipse.setStroke(Color.BLACK);
+        
         }
         
         ellipse.setTranslateX((RUTE_STR - RUTE_STR * 0.3125 * 2) / 2);
