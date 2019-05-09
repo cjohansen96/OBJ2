@@ -51,7 +51,7 @@ public class Admapp extends Application{
     Scene sceneEn,sceneTo;
     Label spillerLabel, datoLabel, infoTxt, lagreLabel, infoLabel, errorMelding;
     Button knappLeggTil, knappDato, knappNyttParti, knappLagre, knappNySpiller;
-    TableView table, tablePartier, tableSpillere;
+    TableView table, tablePartier;
     
     ObservableList<Spiller> spillerListe = FXCollections.observableArrayList();
     ObservableList<Parti> partiListe = FXCollections.observableArrayList();
@@ -132,21 +132,16 @@ public class Admapp extends Application{
         klokkeSlett.setMinWidth(100);
         klokkeSlett.setCellValueFactory(new PropertyValueFactory<>("klokkeSlett"));
         
+        TableColumn<Parti, String> spiller1 = new TableColumn<>("Spiller 1");
+        spiller1.setMinWidth(200);
+        spiller1.setCellValueFactory(new PropertyValueFactory<>("spiller2"));
+        
+        TableColumn<Parti, String> spiller2 = new TableColumn<>("Spiller 2");
+        spiller2.setMinWidth(200);
+        spiller2.setCellValueFactory(new PropertyValueFactory<>("spiller1"));
+        
         tablePartier.setItems(partiListe);
-        tablePartier.getColumns().addAll(dato, klokkeSlett);
-        
-        tableSpillere = new TableView();
-        
-        TableColumn<Spiller, String> spiller1 = new TableColumn<>("Spiller 1");
-        spiller1.setMinWidth(100);
-        spiller1.setCellValueFactory(new PropertyValueFactory<>("navn"));
-        
-        TableColumn<Spiller, String> spiller2 = new TableColumn<>("Spiller 2");
-        spiller2.setMinWidth(100);
-        spiller2.setCellValueFactory(new PropertyValueFactory<>("navn"));
-        
-        tableSpillere.setItems(spillerListe);
-        tableSpillere.getColumns().addAll(spiller1, spiller2);
+        tablePartier.getColumns().addAll(spiller1, spiller2, dato, klokkeSlett);
         
         //action event på knappene
         knappLeggTil.setOnAction(e
@@ -260,7 +255,6 @@ public class Admapp extends Application{
        
        rootTo.setLeft(sideMenyTo);
        rootTo.setCenter(vinduTo);
-       vinduTo.setLeft(tableSpillere);
        vinduTo.setCenter(tablePartier);
        sceneTo= new Scene(rootTo,BREDDE,HOYDE);
        
