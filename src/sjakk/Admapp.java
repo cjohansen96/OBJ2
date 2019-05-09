@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TreeMap;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
@@ -222,25 +223,30 @@ public class Admapp extends Application{
         
         knappLagre.setOnAction(e
                 -> {
+            m = new Manager();
+            TreeMap<String, Double> rangeringsFil = new TreeMap<>();
+            rangeringsFil.put("Christoffer", 2.00);
+            
+            
             for(Parti p : partiListe) {
-                m = new Manager();
                 m.addParti(p.getSpiller1(), p.getSpiller2(), p.getDato(), p.getKlokkeSlett(), vinner, trekk);
-                /*
+                m.sikkerhetsKopiering(p.getSpiller1(), p.getSpiller2(), p.getDato(), p.getKlokkeSlett(), vinner, trekk);
+                
                 String spillerVinner = "";
                 if(p.getResultat().equals("VINNER"))
                     spillerVinner = p.getSpiller1().getNavn();
                 else
                     spillerVinner = p.getSpiller2().getNavn();
                 
-                for(Spiller s: rangeringsFil) {
-                    String rangeringSpiller = s.getNavn();
-                    
-                    if(spillerVinner.equals(rangeringSpiller)){
-                        
-                    }
-                    
+                double poeng = 0;
+                
+                if(rangeringsFil.containsKey(spillerVinner)) {
+                    poeng = rangeringsFil.get(spillerVinner) + 1;
+                    m.addSpill(spillerVinner, poeng);
                 }
-*/
+                else{
+                    m.addSpill(spillerVinner, poeng+1);
+                }
             }
                 
             

@@ -8,7 +8,8 @@ import java.io.*;
 public class Manager {
     
     private static final String TURNERING_FIL = "turnering.dat";
-    private static final String RANGERING_FIL = "rangering.dat";
+    private static final File RANGERING_FIL = new File("rangering.dat");
+    private static final File SIKKERHETSKOPIERING = new File("sikkerhetskopiering.txt"); 
 
     private ArrayList<Parti> partier;
     private ArrayList<Spiller> spillere;
@@ -51,6 +52,35 @@ public class Manager {
         Collections.sort(spillere, spiller);
     }
     
+    public TreeMap<String, Double> getSpillereMap() {
+        ArrayList<Spiller> spillere = getSpillere();
+        
+        ArrayList<String> keys = new ArrayList<>();
+        ArrayList<Double> values = new ArrayList<>();
+       
+        for(Spiller s : spillere){
+            values.add(s.getPoeng());
+            keys.add(s.getNavn());
+        }
+        
+        TreeMap<String, Double> tm = new TreeMap<>();
+        
+        Iterator<Double> valueIterator = values.iterator();
+        Iterator<String> keyIterator = keys.iterator();
+        
+        int i=0;
+        try {
+            while (valueIterator.hasNext() && keyIterator.hasNext()){
+                tm.put(keys.get(i), values.get(i));
+                i++;
+            }
+        }
+        catch(IndexOutOfBoundsException e) {
+            
+        }
+        
+        return tm;
+    }
     
     /**
      * Denne funksjonen vil laste inn arraylisten som er i highscorefila, og putte den i score arraylisten
@@ -132,7 +162,7 @@ public class Manager {
             outputStream.writeObject(spillere);
 
         } catch (FileNotFoundException e) {
-            System.out.println("[Update] FNF Error: " + e.getMessage() + ", programmet vil lage en ny fil!");
+            
         } catch (IOException e) {
             System.out.println("[Update] IO Error: " + e.getMessage());
         } finally {
@@ -140,10 +170,33 @@ public class Manager {
                 if (outputStream != null) {
                     outputStream.flush();
                     outputStream.close();
+                    
                 }
             } catch (IOException e) {
                 System.out.println("[Update] Error: " + e.getMessage());
             }
+        }
+    }
+ 
+    
+    public void sikkerhetsKopiering(Spiller spiller1, Spiller spiller2, String dato, String kl, String vinner, String trekk){
+        try {
+            SIKKERHETSKOPIERING.createNewFile();
+            BufferedWriter fw = null;
+            fw = new BufferedWriter(new FileWriter(SIKKERHETSKOPIERING, true));
+            
+            // Skriver til fil
+            fw.write("Parti: " + spiller1.getNavn() + " vs " + spiller2.getNavn() + "\r\nDato: " + dato + "  Kl: " + kl + 
+                        "\r\nHVIT " + vinner + "\r\nTrekk: " + trekk + "\r\n");
+            
+            fw.newLine();
+            fw.flush();
+            fw.close();
+            
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }catch (IOException e) {
+            System.out.println("Error initializing stream");
         }
     }
     
